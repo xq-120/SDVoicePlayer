@@ -1,0 +1,23 @@
+PODS:
+  - GCDWeakTimer (1.0.0)
+  - SDVoicePlayer (1.0.0):
+    - GCDWeakTimer (~> 1.0.0)
+
+DEPENDENCIES:
+  - SDVoicePlayer (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - GCDWeakTimer
+
+EXTERNAL SOURCES:
+  SDVoicePlayer:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  GCDWeakTimer: 2529549030efc7fd0be9a90326d5f31539ca4d0f
+  SDVoicePlayer: cc85b00b55daf9025746b88c7e5a7a693bb28b7d
+
+PODFILE CHECKSUM: 58ebca7fa3ecf9b1c56db3b33585e34df4e13d73
+
+COCOAPODS: 1.11.3

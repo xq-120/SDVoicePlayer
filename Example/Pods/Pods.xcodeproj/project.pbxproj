@@ -1,0 +1,829 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		193360A60246ADB46506FAF4FEE1A2EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		56795C5DE56C8C946E1C9CC0975C5B3B /* GCDWeakTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3594B813C10DBCF7FC631233820629C4 /* GCDWeakTimer.swift */; };
+		615DB100A643544D17E6A19AF30FD152 /* SDVoicePlayer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D9F2F17057B053441F819C9ED27EE0B /* SDVoicePlayer-dummy.m */; };
+		694C3C8E438F98643A085F137E9AE89B /* GCDWeakTimer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B2D56A9E2DB708583DD0A39805A9BAE /* GCDWeakTimer-dummy.m */; };
+		9BD9C46F8ACCFE1797C110D5658596AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		9F7E6A7A4C3312D060C9AE70634D4C67 /* SDVoicePlayer-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 951F5C364A9396A2B5A7066F47097759 /* SDVoicePlayer-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B367D11F322EE2620722F0A255A24E08 /* SDVoicePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069F20C924438BDC957C472D8FA72A4E /* SDVoicePlayer.swift */; };
+		CBAD18A9CC16A2D8EB33F36E998697D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		D320B0BCDB7B6EDD08FDB812A148AB40 /* Pods-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D7C498FA339E02BD53ECB8916CEA8E /* Pods-Example-dummy.m */; };
+		E4C78672C6265668D2BF9381DC9C788B /* Pods-Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7825A90E082A1582EB16256B0E722B3F /* Pods-Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F3A6B26D857A33B4CE88003650B4E47F /* GCDWeakTimer-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 522FF0A740CFD4C7843A499AB7395A82 /* GCDWeakTimer-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1AD0E8206CF574F595FFEA3A76F3C838 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECFEA31C54D4BFA28B288A268C949300;
+			remoteInfo = GCDWeakTimer;
+		};
+		5668F741C6F52050BB62EF5AEFACA771 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E5ACC967B00900B412F8817E53725058;
+			remoteInfo = SDVoicePlayer;
+		};
+		A43C69571FB171219528BFEE183AF60D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECFEA31C54D4BFA28B288A268C949300;
+			remoteInfo = GCDWeakTimer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		069F20C924438BDC957C472D8FA72A4E /* SDVoicePlayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SDVoicePlayer.swift; path = SDVoicePlayer/Classes/SDVoicePlayer.swift; sourceTree = "<group>"; };
+		1597A9930973C6DF49FB6B0E131940AB /* SDVoicePlayer-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SDVoicePlayer-Info.plist"; sourceTree = "<group>"; };
+		1F667CC0E19EAF34E5A4119E2121F585 /* Pods-Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-Example"; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		243410B9535472556EA4BB6DBC133A0D /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
+		31C1D37707DFAA5E6A164BCC07834264 /* Pods-Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Example-Info.plist"; sourceTree = "<group>"; };
+		3594B813C10DBCF7FC631233820629C4 /* GCDWeakTimer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GCDWeakTimer.swift; path = GCDWeakTimer/Classes/GCDWeakTimer.swift; sourceTree = "<group>"; };
+		35C305D3797C284E6F5BAA1D3E6F9BF8 /* Pods-Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Example.modulemap"; sourceTree = "<group>"; };
+		3DB28F8B7361B91A6BBB0C39ABF03ABB /* GCDWeakTimer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GCDWeakTimer.debug.xcconfig; sourceTree = "<group>"; };
+		439FBAA008617F84E9659111B5890245 /* GCDWeakTimer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = GCDWeakTimer.modulemap; sourceTree = "<group>"; };
+		441854E35F81731E63E53DC7E4EEAD9D /* Pods-Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		522FF0A740CFD4C7843A499AB7395A82 /* GCDWeakTimer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GCDWeakTimer-umbrella.h"; sourceTree = "<group>"; };
+		5A73EB489E48F25C742F013A4D66D056 /* SDVoicePlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SDVoicePlayer.release.xcconfig; sourceTree = "<group>"; };
+		5CAEF1FC1B1F9CE96FEC4EAA3A1FC36F /* SDVoicePlayer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SDVoicePlayer.modulemap; sourceTree = "<group>"; };
+		5D9F2F17057B053441F819C9ED27EE0B /* SDVoicePlayer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDVoicePlayer-dummy.m"; sourceTree = "<group>"; };
+		6326DED46E2D0F6B83EE6F65EA536876 /* GCDWeakTimer-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "GCDWeakTimer-Info.plist"; sourceTree = "<group>"; };
+		6B2D56A9E2DB708583DD0A39805A9BAE /* GCDWeakTimer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "GCDWeakTimer-dummy.m"; sourceTree = "<group>"; };
+		72E6E47E7123C9437AD6346A4DD687E4 /* GCDWeakTimer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GCDWeakTimer-prefix.pch"; sourceTree = "<group>"; };
+		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		76C7E6AA5408966A0E2808F7529AA9E1 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		7825A90E082A1582EB16256B0E722B3F /* Pods-Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Example-umbrella.h"; sourceTree = "<group>"; };
+		951F5C364A9396A2B5A7066F47097759 /* SDVoicePlayer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDVoicePlayer-umbrella.h"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AFECBC24E09D0D25F822C27BD944AFD4 /* Pods-Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Example-frameworks.sh"; sourceTree = "<group>"; };
+		B45138496B85A072654D1D0F8EBBEDE5 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		B6F0C94209343CE927B16AEC6634AA9A /* GCDWeakTimer */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GCDWeakTimer; path = GCDWeakTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BACAF69FF7E4147F7E48099984C17BD6 /* SDVoicePlayer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDVoicePlayer-prefix.pch"; sourceTree = "<group>"; };
+		BEB79EB570CC6F11F665E551AC30CF72 /* SDVoicePlayer */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SDVoicePlayer; path = SDVoicePlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6D7C498FA339E02BD53ECB8916CEA8E /* Pods-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Example-dummy.m"; sourceTree = "<group>"; };
+		E295991BDF1EE0C6BC77D208675D5DE2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		E8216D829E94D8EF18EFE45B9636485E /* GCDWeakTimer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GCDWeakTimer.release.xcconfig; sourceTree = "<group>"; };
+		EA21B344259B58996DB73382B1B1521F /* Pods-Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		EED9C9BB8FD4CC79B46D8A4E1DBF733E /* SDVoicePlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SDVoicePlayer.debug.xcconfig; sourceTree = "<group>"; };
+		EF858938522FE7DAECE300ECF023FB49 /* SDVoicePlayer.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SDVoicePlayer.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		49B71D33B7BFE047BA790EC9F6C214C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				193360A60246ADB46506FAF4FEE1A2EB /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E470C8A6F44748BB89946D2C31FB1DB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBAD18A9CC16A2D8EB33F36E998697D7 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4BB9112D2CBE4A04685EDE1B5C69D14 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BD9C46F8ACCFE1797C110D5658596AF /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4B46CE9156BD5D72C093BCACCC144F55 /* GCDWeakTimer */ = {
+			isa = PBXGroup;
+			children = (
+				3594B813C10DBCF7FC631233820629C4 /* GCDWeakTimer.swift */,
+				D466F5463C3E1CBEC576C75219048017 /* Support Files */,
+			);
+			name = GCDWeakTimer;
+			path = GCDWeakTimer;
+			sourceTree = "<group>";
+		};
+		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		581276DDAB3F2AF4182678176B867C92 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				E295991BDF1EE0C6BC77D208675D5DE2 /* LICENSE */,
+				76C7E6AA5408966A0E2808F7529AA9E1 /* README.md */,
+				EF858938522FE7DAECE300ECF023FB49 /* SDVoicePlayer.podspec */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		77E11046110D25FCF9B7CE0367466D88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B6F0C94209343CE927B16AEC6634AA9A /* GCDWeakTimer */,
+				1F667CC0E19EAF34E5A4119E2121F585 /* Pods-Example */,
+				BEB79EB570CC6F11F665E551AC30CF72 /* SDVoicePlayer */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8432193839C672B583E480618B32E241 /* SDVoicePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				069F20C924438BDC957C472D8FA72A4E /* SDVoicePlayer.swift */,
+				581276DDAB3F2AF4182678176B867C92 /* Pod */,
+				D8111BA448F4984BF7D30EC067CEFFE9 /* Support Files */,
+			);
+			name = SDVoicePlayer;
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		9BDBD95ED116334D1B2835202D8D3060 /* Pods-Example */ = {
+			isa = PBXGroup;
+			children = (
+				35C305D3797C284E6F5BAA1D3E6F9BF8 /* Pods-Example.modulemap */,
+				441854E35F81731E63E53DC7E4EEAD9D /* Pods-Example-acknowledgements.markdown */,
+				EA21B344259B58996DB73382B1B1521F /* Pods-Example-acknowledgements.plist */,
+				D6D7C498FA339E02BD53ECB8916CEA8E /* Pods-Example-dummy.m */,
+				AFECBC24E09D0D25F822C27BD944AFD4 /* Pods-Example-frameworks.sh */,
+				31C1D37707DFAA5E6A164BCC07834264 /* Pods-Example-Info.plist */,
+				7825A90E082A1582EB16256B0E722B3F /* Pods-Example-umbrella.h */,
+				B45138496B85A072654D1D0F8EBBEDE5 /* Pods-Example.debug.xcconfig */,
+				243410B9535472556EA4BB6DBC133A0D /* Pods-Example.release.xcconfig */,
+			);
+			name = "Pods-Example";
+			path = "Target Support Files/Pods-Example";
+			sourceTree = "<group>";
+		};
+		B66FF892812C9AF01660020A7469FE54 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8432193839C672B583E480618B32E241 /* SDVoicePlayer */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		B94C85B3896A4B89B6786C5475AEEF8F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4B46CE9156BD5D72C093BCACCC144F55 /* GCDWeakTimer */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CE2E825F08D3AD0FD76E6D78D7512ED0 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				9BDBD95ED116334D1B2835202D8D3060 /* Pods-Example */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				B66FF892812C9AF01660020A7469FE54 /* Development Pods */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				B94C85B3896A4B89B6786C5475AEEF8F /* Pods */,
+				77E11046110D25FCF9B7CE0367466D88 /* Products */,
+				CE2E825F08D3AD0FD76E6D78D7512ED0 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				578452D2E740E91742655AC8F1636D1F /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D466F5463C3E1CBEC576C75219048017 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				439FBAA008617F84E9659111B5890245 /* GCDWeakTimer.modulemap */,
+				6B2D56A9E2DB708583DD0A39805A9BAE /* GCDWeakTimer-dummy.m */,
+				6326DED46E2D0F6B83EE6F65EA536876 /* GCDWeakTimer-Info.plist */,
+				72E6E47E7123C9437AD6346A4DD687E4 /* GCDWeakTimer-prefix.pch */,
+				522FF0A740CFD4C7843A499AB7395A82 /* GCDWeakTimer-umbrella.h */,
+				3DB28F8B7361B91A6BBB0C39ABF03ABB /* GCDWeakTimer.debug.xcconfig */,
+				E8216D829E94D8EF18EFE45B9636485E /* GCDWeakTimer.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/GCDWeakTimer";
+			sourceTree = "<group>";
+		};
+		D8111BA448F4984BF7D30EC067CEFFE9 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				5CAEF1FC1B1F9CE96FEC4EAA3A1FC36F /* SDVoicePlayer.modulemap */,
+				5D9F2F17057B053441F819C9ED27EE0B /* SDVoicePlayer-dummy.m */,
+				1597A9930973C6DF49FB6B0E131940AB /* SDVoicePlayer-Info.plist */,
+				BACAF69FF7E4147F7E48099984C17BD6 /* SDVoicePlayer-prefix.pch */,
+				951F5C364A9396A2B5A7066F47097759 /* SDVoicePlayer-umbrella.h */,
+				EED9C9BB8FD4CC79B46D8A4E1DBF733E /* SDVoicePlayer.debug.xcconfig */,
+				5A73EB489E48F25C742F013A4D66D056 /* SDVoicePlayer.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/SDVoicePlayer";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3D9437444C301EBE681F64D4652A4C60 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4C78672C6265668D2BF9381DC9C788B /* Pods-Example-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BDD05ED3B0687E1C83F2927A2F7A96F9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F7E6A7A4C3312D060C9AE70634D4C67 /* SDVoicePlayer-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DE336726530DA9CA95C99E117559D9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3A6B26D857A33B4CE88003650B4E47F /* GCDWeakTimer-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0AEE99A309977BD12A049FF48AF9BA4B /* Pods-Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 783C23C04B53BEB9EF97167C87DB2E06 /* Build configuration list for PBXNativeTarget "Pods-Example" */;
+			buildPhases = (
+				3D9437444C301EBE681F64D4652A4C60 /* Headers */,
+				26904C59DA341736AA0596D8DD108030 /* Sources */,
+				E470C8A6F44748BB89946D2C31FB1DB8 /* Frameworks */,
+				56692E2DBD92CB644FE1CA642DD874B7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				916E38487E911B49853D927B12F24B96 /* PBXTargetDependency */,
+				A0E75C8B5D8768D71592AAC5189C3F82 /* PBXTargetDependency */,
+			);
+			name = "Pods-Example";
+			productName = Pods_Example;
+			productReference = 1F667CC0E19EAF34E5A4119E2121F585 /* Pods-Example */;
+			productType = "com.apple.product-type.framework";
+		};
+		E5ACC967B00900B412F8817E53725058 /* SDVoicePlayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0782CF924BCB0CF2083590717F164E52 /* Build configuration list for PBXNativeTarget "SDVoicePlayer" */;
+			buildPhases = (
+				BDD05ED3B0687E1C83F2927A2F7A96F9 /* Headers */,
+				EF868F90702E042E3D497AD53202A60F /* Sources */,
+				F4BB9112D2CBE4A04685EDE1B5C69D14 /* Frameworks */,
+				EE2C073E01E3629F685C2D1448D6EC84 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FCBF94DE6651BB219DF06F12BCDA2732 /* PBXTargetDependency */,
+			);
+			name = SDVoicePlayer;
+			productName = SDVoicePlayer;
+			productReference = BEB79EB570CC6F11F665E551AC30CF72 /* SDVoicePlayer */;
+			productType = "com.apple.product-type.framework";
+		};
+		ECFEA31C54D4BFA28B288A268C949300 /* GCDWeakTimer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E15A84D18F0C7AAC466F445125217BA /* Build configuration list for PBXNativeTarget "GCDWeakTimer" */;
+			buildPhases = (
+				D0DE336726530DA9CA95C99E117559D9 /* Headers */,
+				4A8ED11A0944AB159F429F90E44D3ACC /* Sources */,
+				49B71D33B7BFE047BA790EC9F6C214C6 /* Frameworks */,
+				E2C282BDA916F573BF4693BD430BC646 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GCDWeakTimer;
+			productName = GCDWeakTimer;
+			productReference = B6F0C94209343CE927B16AEC6634AA9A /* GCDWeakTimer */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 77E11046110D25FCF9B7CE0367466D88 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ECFEA31C54D4BFA28B288A268C949300 /* GCDWeakTimer */,
+				0AEE99A309977BD12A049FF48AF9BA4B /* Pods-Example */,
+				E5ACC967B00900B412F8817E53725058 /* SDVoicePlayer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		56692E2DBD92CB644FE1CA642DD874B7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2C282BDA916F573BF4693BD430BC646 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE2C073E01E3629F685C2D1448D6EC84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		26904C59DA341736AA0596D8DD108030 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D320B0BCDB7B6EDD08FDB812A148AB40 /* Pods-Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A8ED11A0944AB159F429F90E44D3ACC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56795C5DE56C8C946E1C9CC0975C5B3B /* GCDWeakTimer.swift in Sources */,
+				694C3C8E438F98643A085F137E9AE89B /* GCDWeakTimer-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF868F90702E042E3D497AD53202A60F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B367D11F322EE2620722F0A255A24E08 /* SDVoicePlayer.swift in Sources */,
+				615DB100A643544D17E6A19AF30FD152 /* SDVoicePlayer-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		916E38487E911B49853D927B12F24B96 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GCDWeakTimer;
+			target = ECFEA31C54D4BFA28B288A268C949300 /* GCDWeakTimer */;
+			targetProxy = A43C69571FB171219528BFEE183AF60D /* PBXContainerItemProxy */;
+		};
+		A0E75C8B5D8768D71592AAC5189C3F82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SDVoicePlayer;
+			target = E5ACC967B00900B412F8817E53725058 /* SDVoicePlayer */;
+			targetProxy = 5668F741C6F52050BB62EF5AEFACA771 /* PBXContainerItemProxy */;
+		};
+		FCBF94DE6651BB219DF06F12BCDA2732 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GCDWeakTimer;
+			target = ECFEA31C54D4BFA28B288A268C949300 /* GCDWeakTimer */;
+			targetProxy = 1AD0E8206CF574F595FFEA3A76F3C838 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		23F2BC6F2DF34A51330F82BB0C6F7721 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 243410B9535472556EA4BB6DBC133A0D /* Pods-Example.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Example/Pods-Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Example/Pods-Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		52EAADCCB19EAAA52434E588646CBF43 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B45138496B85A072654D1D0F8EBBEDE5 /* Pods-Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Example/Pods-Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Example/Pods-Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		59A526279187C590404ACB8752050C1D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EED9C9BB8FD4CC79B46D8A4E1DBF733E /* SDVoicePlayer.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SDVoicePlayer/SDVoicePlayer-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SDVoicePlayer/SDVoicePlayer-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SDVoicePlayer/SDVoicePlayer.modulemap";
+				PRODUCT_MODULE_NAME = SDVoicePlayer;
+				PRODUCT_NAME = SDVoicePlayer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6FD4AA46F0FD167669F6E2B348EF85F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A73EB489E48F25C742F013A4D66D056 /* SDVoicePlayer.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SDVoicePlayer/SDVoicePlayer-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SDVoicePlayer/SDVoicePlayer-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SDVoicePlayer/SDVoicePlayer.modulemap";
+				PRODUCT_MODULE_NAME = SDVoicePlayer;
+				PRODUCT_NAME = SDVoicePlayer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		707DF470DC1FAD175DF4CBA59A520D4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8216D829E94D8EF18EFE45B9636485E /* GCDWeakTimer.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/GCDWeakTimer/GCDWeakTimer-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/GCDWeakTimer/GCDWeakTimer-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/GCDWeakTimer/GCDWeakTimer.modulemap";
+				PRODUCT_MODULE_NAME = GCDWeakTimer;
+				PRODUCT_NAME = GCDWeakTimer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7EE7A78859F657F6BEFC651185B43192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		8E4E8C0A7B10E46E58C4B585374DFAE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3DB28F8B7361B91A6BBB0C39ABF03ABB /* GCDWeakTimer.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/GCDWeakTimer/GCDWeakTimer-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/GCDWeakTimer/GCDWeakTimer-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/GCDWeakTimer/GCDWeakTimer.modulemap";
+				PRODUCT_MODULE_NAME = GCDWeakTimer;
+				PRODUCT_NAME = GCDWeakTimer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D299434AB35E7FD6F7921C8EF24742FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0782CF924BCB0CF2083590717F164E52 /* Build configuration list for PBXNativeTarget "SDVoicePlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59A526279187C590404ACB8752050C1D /* Debug */,
+				6FD4AA46F0FD167669F6E2B348EF85F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D299434AB35E7FD6F7921C8EF24742FF /* Debug */,
+				7EE7A78859F657F6BEFC651185B43192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		783C23C04B53BEB9EF97167C87DB2E06 /* Build configuration list for PBXNativeTarget "Pods-Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52EAADCCB19EAAA52434E588646CBF43 /* Debug */,
+				23F2BC6F2DF34A51330F82BB0C6F7721 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9E15A84D18F0C7AAC466F445125217BA /* Build configuration list for PBXNativeTarget "GCDWeakTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E4E8C0A7B10E46E58C4B585374DFAE9 /* Debug */,
+				707DF470DC1FAD175DF4CBA59A520D4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

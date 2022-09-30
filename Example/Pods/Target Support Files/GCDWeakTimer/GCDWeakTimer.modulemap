@@ -1,0 +1,6 @@
+framework module GCDWeakTimer {
+  umbrella header "GCDWeakTimer-umbrella.h"
+
+  export *
+  module * { export * }
+}
