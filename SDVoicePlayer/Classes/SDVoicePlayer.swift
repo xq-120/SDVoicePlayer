@@ -42,6 +42,7 @@ import GCDWeakTimer
     }
     @objc public var duration: TimeInterval = 0
     private var playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?
+    private var voiceConvertHandler: ((_ voiceURL: String?, _ srcPath:String?) -> String?)?
     private var playCompletion: ((String?, Error?) -> Void)?
     private let playingQueue = DispatchQueue.init(label: "com.VoicePlayer.playingSerialQueue")
     private let queueKey = DispatchSpecificKey<Int>()
@@ -120,7 +121,10 @@ import GCDWeakTimer
         }
     }
     
-    @objc public func play(voice url: String, playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?, playCompletion: ((String?, Error?) -> Void)?) {
+    @objc public func play(voice url: String,
+                           voiceConvertHandler: ((_ voiceURL: String?, _ srcPath:String?) -> String?)?,
+                           playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?,
+                           playCompletion: ((String?, Error?) -> Void)?) {
         guard let voiceURL = URL.init(string: url) else {return}
         
         self.playingQueue.async {
@@ -133,6 +137,7 @@ import GCDWeakTimer
             }
             
             self.currentURL = url
+            self.voiceConvertHandler = voiceConvertHandler
             self.playTimeChanged = playTimeChanged
             self.playCompletion = playCompletion
             self._isPlaying = true
@@ -246,6 +251,7 @@ import GCDWeakTimer
         
         self.playTimeChanged = nil
         self.playCompletion = nil
+        self.voiceConvertHandler = nil
     }
 
     // MARK: AVAudioPlayerDelegate
@@ -273,7 +279,12 @@ import GCDWeakTimer
             }
             
             if error == nil {
-                let destLoc = URL.init(fileURLWithPath: self.mappedVoiceFilePath(url: url.absoluteString))
+                var srcFilePath = self.mappedVoiceFilePath(url: url.absoluteString)
+                if let convertedVoicePath = self.voiceConvertHandler?(self.currentURL, srcFilePath), convertedVoicePath != srcFilePath {
+                    //替换掉之前的缓存
+                    try? FileManager.default.moveItem(atPath: convertedVoicePath, toPath: srcFilePath)
+                }
+                let destLoc = URL.init(fileURLWithPath: srcFilePath)
                 self.playVoice(fileURL: destLoc)
             } else {
                 //下载失败就不用播放,直接stop并回调
@@ -311,6 +322,22 @@ import GCDWeakTimer
     private func getCacheVoiceDirectory() -> String {
         let folderPath = "\(NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!)".appendingPathComponent("Voice")
         return folderPath
+    }
+    
+    private func getResourceExtensionName(url: String) -> String? {
+        var url = url
+        var file: String = ""
+        if var idx = url.lastIndex(of: "/") {
+            idx = url.index(idx, offsetBy: 1)
+            file = String(url[idx...])
+        }
+        if var idx = file.lastIndex(of: ".") {
+            idx = file.index(idx, offsetBy: 1)
+            let ext = String(file[idx...])
+            return ext.count == 0 ? nil : ext
+        } else {
+            return nil
+        }
     }
     
     private func mappedVoiceFilePath(url: String) -> String {
