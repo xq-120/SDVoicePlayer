@@ -70,9 +70,7 @@ import GCDWeakTimer
     
     private func setupAudioSession() {
         let session = AVAudioSession.sharedInstance()
-        if session.category == .playback || session.category == .playAndRecord {
-            return
-        }
+        //坑：如果之前是playAndRecord，这里必须得设置为playback。要不然没声音。
         try? session.setCategory(.playback)
         try? session.setActive(true)
     }
