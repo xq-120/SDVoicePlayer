@@ -95,8 +95,8 @@ class FDEDetailViewController: FDEBaseViewController {
         return block
     }
     
-    private func playCompletionBlock() -> ((String?, SDVoicePlayerError?) -> Void)? {
-        let block: ((String?, SDVoicePlayerError?) -> Void)? = { [weak self] (currentURL, error) in
+    private func playCompletionBlock() -> ((String?, Error?) -> Void)? {
+        let block: ((String?, Error?) -> Void)? = { [weak self] (currentURL, error) in
             guard let self = self else {
                 return
             }

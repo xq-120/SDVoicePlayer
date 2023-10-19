@@ -11,36 +11,25 @@ import UIKit
 import CommonCrypto
 import GCDWeakTimer
 
-public enum SDVoicePlayerStatus: Int {
+@objc public enum SDVoicePlayerStatus: Int {
     case stop
     case playing
     case paused
 }
 
-public enum SDVoicePlayerError: Error {
+@objc public enum SDVoicePlayerError: Int {
     case unknown
     case downloadFailed
     case decodeFailed
-    
-    public var localizedDescription: String {
-        switch self {
-        case .unknown:
-            return "未知错误"
-        case .downloadFailed:
-            return "网络异常，请重试"
-        case .decodeFailed:
-            return "播放失败，请重试"
-        }
-    }
 }
 
-public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadDelegate {
-    public static let shared = SDVoicePlayer()
+@objc public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadDelegate {
+    @objc public static let shared = SDVoicePlayer()
     
     private var player: AVAudioPlayer?
     private var playState: SDVoicePlayerStatus = .stop
-    public var currentURL: String?
-    public var currentTime: TimeInterval {
+    @objc public var currentURL: String?
+    @objc public var currentTime: TimeInterval {
         var currentTime = 0.0
         if DispatchQueue.getSpecific(key: self.queueKey) != nil {
             currentTime = self.player?.currentTime ?? 0
@@ -51,14 +40,14 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
         }
         return currentTime
     }
-    public var duration: TimeInterval = 0
+    @objc public var duration: TimeInterval = 0
     private var playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?
-    private var playCompletion: ((String?, SDVoicePlayerError?) -> Void)?
+    private var playCompletion: ((String?, Error?) -> Void)?
     private let playingQueue = DispatchQueue.init(label: "com.VoicePlayer.playingSerialQueue")
     private let queueKey = DispatchSpecificKey<Int>()
     private let queueKeyValue = Int(arc4random())
     private var _isPlaying = false
-    public var isStopWhenEnterBackground = true
+    @objc public var isStopWhenEnterBackground = true
         
     private var timer: GCDWeakTimer?
     
@@ -93,7 +82,7 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
         }
     }
     
-    public func isPlaying() -> Bool {
+    @objc public func isPlaying() -> Bool {
         var playing = false
         if DispatchQueue.getSpecific(key: self.queueKey) != nil {
             playing = self._isPlaying
@@ -105,7 +94,7 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
         return playing
     }
     
-    public func isPlaying(url: String) -> Bool {
+    @objc public func isPlaying(url: String) -> Bool {
         var playing = false
         if DispatchQueue.getSpecific(key: self.queueKey) != nil {
             playing = self._isPlaying && url == self.currentURL
@@ -118,20 +107,20 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
     }
     
     //更新回调。比如tableView滚动时，可能需要更新回调
-    public func setPlayTimeChanged(block: ((String?, TimeInterval, TimeInterval) -> Void)?) {
+    @objc public func setPlayTimeChanged(block: ((String?, TimeInterval, TimeInterval) -> Void)?) {
         self.playingQueue.async {
             self.playTimeChanged = block
         }
     }
     
     //更新回调。
-    public func setPlayCompletion(block: ((String?, SDVoicePlayerError?) -> Void)?) {
+    @objc public func setPlayCompletion(block: ((String?, Error?) -> Void)?) {
         self.playingQueue.async {
             self.playCompletion = block
         }
     }
     
-    public func play(voice url: String, playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?, playCompletion: ((String?, SDVoicePlayerError?) -> Void)?) {
+    @objc public func play(voice url: String, playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?, playCompletion: ((String?, Error?) -> Void)?) {
         guard let voiceURL = URL.init(string: url) else {return}
         
         self.playingQueue.async {
@@ -204,7 +193,7 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
         }
     }
     
-    public func pause() {
+    @objc public func pause() {
         self.playingQueue.async {
             if self.player == nil {
                 return
@@ -215,7 +204,7 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
         }
     }
     
-    public func play() {
+    @objc public func play() {
         self.playingQueue.async {
             if self.player == nil {
                 return
@@ -225,11 +214,11 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
     }
     
     /// 调用stop后，会回调播放完成回调
-    public func stop(completion: (()->Void)? = nil) {
+    @objc public func stop(completion: (()->Void)? = nil) {
         self.stop(completion: completion, error: nil)
     }
     
-    private func stop(completion: (()->Void)?, error: SDVoicePlayerError?) {
+    private func stop(completion: (()->Void)?, error: Error?) {
         self.playingQueue.async {
             let prePlayCompletionBlock = self.playCompletion
             let playURL = self.currentURL
@@ -261,7 +250,7 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
 
     // MARK: AVAudioPlayerDelegate
     public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        let err = SDVoicePlayerError.decodeFailed
+        let err = NSError.init(domain: "com.SDVoicePlayer.www", code: SDVoicePlayerError.decodeFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "播放失败，请重试"])
         self.stop(completion: nil, error: err)
     }
     
@@ -288,7 +277,7 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
                 self.playVoice(fileURL: destLoc)
             } else {
                 //下载失败就不用播放,直接stop并回调
-                let err = SDVoicePlayerError.downloadFailed
+                let err = NSError.init(domain: "com.SDVoicePlayer.www", code: SDVoicePlayerError.downloadFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "网络异常，请重试"])
                 self.stop(completion: nil, error: err)
             }
             
@@ -306,12 +295,12 @@ public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadD
     }
     
     // MARK: Cache
-    public func isVoiceCached(url: String) -> Bool {
+    @objc public func isVoiceCached(url: String) -> Bool {
         let filePath = mappedVoiceFilePath(url: url)
         return FileManager.default.fileExists(atPath: filePath)
     }
     
-    public func getCachedVoice(for url: String) -> String? {
+    @objc public func getCachedVoice(for url: String) -> String? {
         var filePath: String? = nil
         if isVoiceCached(url: url) {
             filePath = mappedVoiceFilePath(url: url)

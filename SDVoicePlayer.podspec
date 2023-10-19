@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SDVoicePlayer'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = '语音播放器。'
 
   s.homepage         = 'https://github.com/xq-120/SDVoicePlayer'
