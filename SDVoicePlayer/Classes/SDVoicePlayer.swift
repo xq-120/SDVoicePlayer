@@ -155,17 +155,17 @@ import GCDWeakTimer
     }
     
     private func playVoice(fileURL: URL) {
-        self.setupAudioSession()
         self.player = try? AVAudioPlayer.init(contentsOf: fileURL)
-        if let _ = self.player {
-            self.player?.delegate = self
-            self.player?.prepareToPlay()
-            self.duration = self.player?.duration ?? 0
-            self.play()
-        } else {
+        if self.player == nil {
             let err = NSError.init(domain: "com.SDVoicePlayer.www", code: SDVoicePlayerError.decodeFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "播放失败，请重试"])
             self.stop(completion: nil, error: err)
+            return
         }
+        self.setupAudioSession()
+        self.player?.delegate = self
+        self.player?.prepareToPlay()
+        self.duration = self.player?.duration ?? 0
+        self.play()
     }
     
     private func play(atTime: TimeInterval = 0) {
