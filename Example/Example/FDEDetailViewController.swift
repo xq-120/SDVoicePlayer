@@ -71,7 +71,7 @@ class FDEDetailViewController: FDEBaseViewController {
             DLog("开始播放")
             let playTimeChangedBlock = playTimeChangedBlock()
             let playCompletionBlock = playCompletionBlock()
-            SDVoicePlayer.shared.play(voice: voice.voiceURL, playTimeChanged: playTimeChangedBlock, playCompletion: playCompletionBlock)
+            SDVoicePlayer.shared.play(voice: voice.voiceURL, voiceConvertHandler: nil, playTimeChanged: playTimeChangedBlock, playCompletion: playCompletionBlock)
         }
     }
     
