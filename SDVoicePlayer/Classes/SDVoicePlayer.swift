@@ -19,9 +19,13 @@ import GCDWeakTimer
 
 @objc public enum SDVoicePlayerError: Int {
     case unknown
+    case invalidURL
     case downloadFailed
     case decodeFailed
 }
+
+private let kErrorDomain = "com.SDVoicePlayer.www"
+private let kPlayErrorDesc = "播放失败，请重试"
 
 @objc public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadDelegate {
     @objc public static let shared = SDVoicePlayer()
@@ -41,13 +45,18 @@ import GCDWeakTimer
         return currentTime
     }
     @objc public var duration: TimeInterval = 0
-    private var playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?
-    private var voiceConvertHandler: ((_ voiceURL: String?, _ srcPath:String?) -> String?)?
-    private var playCompletion: ((String?, Error?) -> Void)?
+    private var playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?
+    /// 下载完成后默认的转换处理
+    @objc public var defaultVoiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?
+    private var voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?
+    private var playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?
+    
     private let playingQueue = DispatchQueue.init(label: "com.VoicePlayer.playingSerialQueue")
     private let queueKey = DispatchSpecificKey<Int>()
     private let queueKeyValue = Int(arc4random())
+    
     private var _isPlaying = false
+    
     @objc public var isStopWhenEnterBackground = true
         
     private var timer: GCDWeakTimer?
@@ -106,32 +115,31 @@ import GCDWeakTimer
     }
     
     //更新回调。比如tableView滚动时，可能需要更新回调
-    @objc public func setPlayTimeChanged(block: ((String?, TimeInterval, TimeInterval) -> Void)?) {
+    @objc public func setPlayTimeChanged(block: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?) {
         self.playingQueue.async {
             self.playTimeChanged = block
         }
     }
     
     //更新回调。
-    @objc public func setPlayCompletion(block: ((String?, Error?) -> Void)?) {
+    @objc public func setPlayCompletion(block: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
         self.playingQueue.async {
             self.playCompletion = block
         }
     }
     
     @objc public func play(voice url: String,
-                           voiceConvertHandler: ((_ voiceURL: String?, _ srcPath:String?) -> String?)?,
-                           playTimeChanged: ((String?, TimeInterval, TimeInterval) -> Void)?,
-                           playCompletion: ((String?, Error?) -> Void)?) {
-        guard let voiceURL = URL.init(string: url) else {return}
+                           voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?,
+                           playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?,
+                           playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
         
         self.playingQueue.async {
             //停止当前播放的语音
-            let prePlayCompletionBlock = self.playCompletion
-            let playURL = self.currentURL
+            let prePlayCompletion = self.playCompletion
+            let prePlayURL = self.currentURL
             self.internalStop()
             DispatchQueue.main.async {
-                prePlayCompletionBlock?(playURL, nil)
+                prePlayCompletion?(prePlayURL, nil)
             }
             
             self.currentURL = url
@@ -140,25 +148,39 @@ import GCDWeakTimer
             self.playCompletion = playCompletion
             self._isPlaying = true
             
-            let cachedPath = self.getCachedVoice(for: url)
-            if cachedPath != nil {
-                let cachedFileURL = URL.init(fileURLWithPath: cachedPath!)
-                self.playVoice(fileURL: cachedFileURL)
-            } else {
+            if !url.lowercased().hasPrefix("http") {
+                //尝试播放本地文件
+                let voiceURL = URL.init(fileURLWithPath: url)
+                self.playVoice(fileURL: voiceURL)
+            } else if let cachedPath = self.getCachedVoice(for: url) {
+                let voiceURL = URL.init(fileURLWithPath: cachedPath)
+                self.playVoice(fileURL: voiceURL)
+            } else if let voiceURL = URL.init(string: url) {
                 //取消当前的下载
                 self.downloadTask?.cancel()
                 self.downloadTask = nil
+                
+                //下载后播放
                 self.downloadTask = self.session.downloadTask(with: voiceURL)
                 self.downloadTask?.resume()
+            } else {
+                self.internalStop()
+                DispatchQueue.main.async {
+                    playCompletion?(url, self.getErrorWithCode(code: .invalidURL))
+                }
             }
         }
+    }
+    
+    private func getErrorWithCode(code: SDVoicePlayerError) -> NSError {
+        let err = NSError.init(domain: kErrorDomain, code: code.rawValue, userInfo: [NSLocalizedDescriptionKey: kPlayErrorDesc])
+        return err
     }
     
     private func playVoice(fileURL: URL) {
         self.player = try? AVAudioPlayer.init(contentsOf: fileURL)
         if self.player == nil {
-            let err = NSError.init(domain: "com.SDVoicePlayer.www", code: SDVoicePlayerError.decodeFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "播放失败，请重试"])
-            self.stop(completion: nil, error: err)
+            self.stop(completion: nil, error: self.getErrorWithCode(code: .decodeFailed))
             return
         }
         self.setupAudioSession()
@@ -222,17 +244,17 @@ import GCDWeakTimer
     }
     
     /// 调用stop后，会回调播放完成回调
-    @objc public func stop(completion: (()->Void)? = nil) {
-        self.stop(completion: completion, error: nil)
+    @objc public func stop() {
+        self.stop(completion: nil, error: nil)
     }
     
     private func stop(completion: (()->Void)?, error: Error?) {
         self.playingQueue.async {
-            let prePlayCompletionBlock = self.playCompletion
-            let playURL = self.currentURL
+            let prePlayCompletion = self.playCompletion
+            let prePlayURL = self.currentURL
             self.internalStop()
             DispatchQueue.main.async {
-                prePlayCompletionBlock?(playURL, error)
+                prePlayCompletion?(prePlayURL, error)
                 completion?()
             }
         }
@@ -259,8 +281,7 @@ import GCDWeakTimer
 
     // MARK: AVAudioPlayerDelegate
     public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        let err = NSError.init(domain: "com.SDVoicePlayer.www", code: SDVoicePlayerError.decodeFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "播放失败，请重试"])
-        self.stop(completion: nil, error: err)
+        self.stop(completion: nil, error: self.getErrorWithCode(code: .decodeFailed))
     }
     
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
@@ -282,8 +303,9 @@ import GCDWeakTimer
             }
             
             if error == nil {
-                var srcFilePath = self.mappedVoiceFilePath(url: url.absoluteString)
-                if let convertedVoicePath = self.voiceConvertHandler?(self.currentURL, srcFilePath), convertedVoicePath != srcFilePath {
+                let srcFilePath = self.mappedVoiceFilePath(url: url.absoluteString)
+                let voiceConvertHandler = self.voiceConvertHandler ?? self.defaultVoiceConvertHandler
+                if let convertHandler = voiceConvertHandler, let convertedVoicePath = convertHandler(self.currentURL, srcFilePath), convertedVoicePath != srcFilePath {
                     //替换掉之前的缓存
                     try? FileManager.default.moveItem(atPath: convertedVoicePath, toPath: srcFilePath)
                 }
@@ -291,10 +313,8 @@ import GCDWeakTimer
                 self.playVoice(fileURL: destLoc)
             } else {
                 //下载失败就不用播放,直接stop并回调
-                let err = NSError.init(domain: "com.SDVoicePlayer.www", code: SDVoicePlayerError.downloadFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "网络异常，请重试"])
-                self.stop(completion: nil, error: err)
+                self.stop(completion: nil, error: self.getErrorWithCode(code: .downloadFailed))
             }
-            
         }
     }
     
@@ -328,7 +348,7 @@ import GCDWeakTimer
     }
     
     private func getResourceExtensionName(url: String) -> String? {
-        var url = url
+        let url = url
         var file: String = ""
         if var idx = url.lastIndex(of: "/") {
             idx = url.index(idx, offsetBy: 1)

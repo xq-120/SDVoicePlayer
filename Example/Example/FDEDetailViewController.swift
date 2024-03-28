@@ -43,7 +43,8 @@ class FDEDetailViewController: FDEBaseViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         voice = VoiceModel.init(duration: 10, voiceURL: "http://res.dudufm.com/voice/profile/2a76e73a404a40d49d7cc5ed89eb6239.aac")
-        
+//        voice = VoiceModel.init(duration: 1, voiceURL: Bundle.main.path(forResource: "咚咚", ofType: "mp3")!)
+//        voice = VoiceModel.init(duration: 3, voiceURL: Bundle.main.path(forResource: "键盘打字音效", ofType: "wav")!)
         setupSubview()
     }
     

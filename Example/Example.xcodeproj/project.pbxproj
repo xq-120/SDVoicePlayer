@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4232F1EB32563D8C543F11EE /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B0A6ED0AFF003B2F662837 /* Pods_Example.framework */; };
+		8FB4D0F32BB5B65E00BA73E8 /* 键盘打字音效.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8FB4D0F12BB5B65E00BA73E8 /* 键盘打字音效.wav */; };
+		8FB4D0F42BB5B65E00BA73E8 /* 咚咚.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8FB4D0F22BB5B65E00BA73E8 /* 咚咚.mp3 */; };
 		8FBDC8B828E6E73F006392B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBDC8B728E6E73F006392B8 /* AppDelegate.swift */; };
 		8FBDC8BA28E6E73F006392B8 /* FDEHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBDC8B928E6E73F006392B8 /* FDEHomeViewController.swift */; };
 		8FBDC8BC28E6E73F006392B8 /* FDEDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBDC8BB28E6E73F006392B8 /* FDEDetailViewController.swift */; };
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		67B7DB36D1A969A9DDDEF8A5 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		8208F19AB6D81E21F4099FBC /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		8FB4D0F12BB5B65E00BA73E8 /* 键盘打字音效.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "键盘打字音效.wav"; sourceTree = "<group>"; };
+		8FB4D0F22BB5B65E00BA73E8 /* 咚咚.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "咚咚.mp3"; sourceTree = "<group>"; };
 		8FBDC8B428E6E73F006392B8 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FBDC8B728E6E73F006392B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8FBDC8B928E6E73F006392B8 /* FDEHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDEHomeViewController.swift; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 				8FBDC8C528E6E73F006392B8 /* FDENavigationController.swift */,
 				8FBDC8C728E6E73F006392B8 /* DLog.swift */,
 				8FBDC8C928E6E73F006392B8 /* FDEItemModel.swift */,
+				8FB4D0F22BB5B65E00BA73E8 /* 咚咚.mp3 */,
+				8FB4D0F12BB5B65E00BA73E8 /* 键盘打字音效.wav */,
 				8FBDC8CB28E6E740006392B8 /* Assets.xcassets */,
 				8FBDC8CD28E6E740006392B8 /* LaunchScreen.storyboard */,
 				8FBDC8D028E6E740006392B8 /* Info.plist */,
@@ -169,6 +175,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FB4D0F42BB5B65E00BA73E8 /* 咚咚.mp3 in Resources */,
+				8FB4D0F32BB5B65E00BA73E8 /* 键盘打字音效.wav in Resources */,
 				8FBDC8CC28E6E740006392B8 /* Assets.xcassets in Resources */,
 				8FBDC8CF28E6E740006392B8 /* LaunchScreen.storyboard in Resources */,
 			);
