@@ -50,13 +50,14 @@ private let kPlayErrorDesc = "播放失败，请重试"
     @objc public var defaultVoiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?
     private var voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?
     private var playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?
+    private var downloadProgress: ((_ voiceURL: String?, _ progress: Float) -> Void)?
     
     private let playingQueue = DispatchQueue.init(label: "com.VoicePlayer.playingSerialQueue")
     private let queueKey = DispatchSpecificKey<Int>()
     private let queueKeyValue = Int(arc4random())
     
     private var _isPlaying = false
-    
+
     @objc public var isStopWhenEnterBackground = true
         
     private var timer: GCDWeakTimer?
@@ -133,6 +134,14 @@ private let kPlayErrorDesc = "播放失败，请重试"
                            playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?,
                            playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
         
+        self.play(voice: url, downloadProgress: nil, voiceConvertHandler: voiceConvertHandler, playTimeChanged: playTimeChanged, playCompletion: playCompletion)
+    }
+    
+    @objc public func play(voice url: String,
+                           downloadProgress: ((_ voiceURL: String?, _ progress: Float) -> Void)?,
+                           voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?,
+                           playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?,
+                           playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
         self.playingQueue.async {
             //停止当前播放的语音
             let prePlayCompletion = self.playCompletion
@@ -146,13 +155,22 @@ private let kPlayErrorDesc = "播放失败，请重试"
             self.voiceConvertHandler = voiceConvertHandler
             self.playTimeChanged = playTimeChanged
             self.playCompletion = playCompletion
+            self.downloadProgress = downloadProgress
             self._isPlaying = true
             
             if !url.lowercased().hasPrefix("http") {
+                DispatchQueue.main.async {
+                    downloadProgress?(url, 1)
+                }
+                
                 //尝试播放本地文件
                 let voiceURL = URL.init(fileURLWithPath: url)
                 self.playVoice(fileURL: voiceURL)
             } else if let cachedPath = self.getCachedVoice(for: url) {
+                DispatchQueue.main.async {
+                    downloadProgress?(url, 1)
+                }
+                
                 let voiceURL = URL.init(fileURLWithPath: cachedPath)
                 self.playVoice(fileURL: voiceURL)
             } else if let voiceURL = URL.init(string: url) {
@@ -218,8 +236,9 @@ private let kPlayErrorDesc = "播放失败，请重试"
         let currentTime = self.player?.currentTime ?? 0
         let duration = self.duration
         let playURL = self.currentURL
+        let playTimeChangedBlk = self.playTimeChanged
         DispatchQueue.main.async {
-            self.playTimeChanged?(playURL, currentTime, duration)
+            playTimeChangedBlk?(playURL, currentTime, duration)
         }
     }
     
@@ -277,6 +296,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
         self.playTimeChanged = nil
         self.playCompletion = nil
         self.voiceConvertHandler = nil
+        self.downloadProgress = nil
     }
 
     // MARK: AVAudioPlayerDelegate
@@ -325,7 +345,14 @@ private let kPlayErrorDesc = "播放失败，请重试"
     }
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        
+        guard let url = downloadTask.originalRequest?.url else { return }
+        let progress = min(1, Float(totalBytesWritten) / Float(totalBytesExpectedToWrite))
+        self.playingQueue.async {
+            let downldProgress = self.downloadProgress
+            DispatchQueue.main.async {
+                downldProgress?(url.absoluteString, progress)
+            }
+        }
     }
     
     // MARK: Cache
