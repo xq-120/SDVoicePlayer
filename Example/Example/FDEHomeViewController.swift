@@ -30,7 +30,6 @@ class FDEHomeViewController: FDEBaseViewController, UITableViewDelegate, UITable
     
     func setupSubview() {
         self.navigationItem.title = "首页"
-        
         view.addSubview(tableView)
         tableView.frame = view.frame
     }
@@ -46,6 +45,17 @@ class FDEHomeViewController: FDEBaseViewController, UITableViewDelegate, UITable
             self?.navigationController?.pushViewController(detailVC, animated: true)
         }
         dataList.append(one)
+        
+        do {
+            let item = FDEItemModel.init()
+            item.title = "voice list"
+            item.actionBlk = { [weak self] in
+                let detailVC = FDEVoiceListViewController.init()
+                detailVC.hidesBottomBarWhenPushed = true
+                self?.navigationController?.pushViewController(detailVC, animated: true)
+            }
+            dataList.append(item)
+        }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

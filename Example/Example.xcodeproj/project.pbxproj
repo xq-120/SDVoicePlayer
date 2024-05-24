@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4232F1EB32563D8C543F11EE /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B0A6ED0AFF003B2F662837 /* Pods_Example.framework */; };
+		8F1BA0E62C008B0B00A61AB1 /* SYAVoiceTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1BA0E52C008B0B00A61AB1 /* SYAVoiceTextView.swift */; };
+		8F1BA0EA2C008C7100A61AB1 /* ZAELabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1BA0E92C008C7100A61AB1 /* ZAELabel.m */; };
+		8F1BA0EC2C00997600A61AB1 /* FDEVoiceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1BA0EB2C00997600A61AB1 /* FDEVoiceModel.swift */; };
+		8F1BA0EE2C0099E900A61AB1 /* voiceList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8F1BA0ED2C0099E900A61AB1 /* voiceList.json */; };
+		8F1BA0F12C009D6600A61AB1 /* FDEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1BA0F02C009D6600A61AB1 /* FDEUtils.m */; };
 		8FB4D0F32BB5B65E00BA73E8 /* 键盘打字音效.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8FB4D0F12BB5B65E00BA73E8 /* 键盘打字音效.wav */; };
 		8FB4D0F42BB5B65E00BA73E8 /* 咚咚.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8FB4D0F22BB5B65E00BA73E8 /* 咚咚.mp3 */; };
 		8FBDC8B828E6E73F006392B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBDC8B728E6E73F006392B8 /* AppDelegate.swift */; };
@@ -22,11 +27,21 @@
 		8FBDC8CA28E6E73F006392B8 /* FDEItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBDC8C928E6E73F006392B8 /* FDEItemModel.swift */; };
 		8FBDC8CC28E6E740006392B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FBDC8CB28E6E740006392B8 /* Assets.xcassets */; };
 		8FBDC8CF28E6E740006392B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8FBDC8CD28E6E740006392B8 /* LaunchScreen.storyboard */; };
+		8FD8400A2C00890B0072B626 /* FDEVoiceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD840092C00890B0072B626 /* FDEVoiceListViewController.swift */; };
+		8FD8400C2C00899C0072B626 /* FDEVoiceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD8400B2C00899C0072B626 /* FDEVoiceTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		67B7DB36D1A969A9DDDEF8A5 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		8208F19AB6D81E21F4099FBC /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		8F1BA0E52C008B0B00A61AB1 /* SYAVoiceTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SYAVoiceTextView.swift; sourceTree = "<group>"; };
+		8F1BA0E72C008C7000A61AB1 /* Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		8F1BA0E82C008C7100A61AB1 /* ZAELabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZAELabel.h; sourceTree = "<group>"; };
+		8F1BA0E92C008C7100A61AB1 /* ZAELabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZAELabel.m; sourceTree = "<group>"; };
+		8F1BA0EB2C00997600A61AB1 /* FDEVoiceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDEVoiceModel.swift; sourceTree = "<group>"; };
+		8F1BA0ED2C0099E900A61AB1 /* voiceList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = voiceList.json; sourceTree = "<group>"; };
+		8F1BA0EF2C009D6600A61AB1 /* FDEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDEUtils.h; sourceTree = "<group>"; };
+		8F1BA0F02C009D6600A61AB1 /* FDEUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FDEUtils.m; sourceTree = "<group>"; };
 		8FB4D0F12BB5B65E00BA73E8 /* 键盘打字音效.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "键盘打字音效.wav"; sourceTree = "<group>"; };
 		8FB4D0F22BB5B65E00BA73E8 /* 咚咚.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "咚咚.mp3"; sourceTree = "<group>"; };
 		8FBDC8B428E6E73F006392B8 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,6 +58,8 @@
 		8FBDC8CB28E6E740006392B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8FBDC8CE28E6E740006392B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8FBDC8D028E6E740006392B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8FD840092C00890B0072B626 /* FDEVoiceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDEVoiceListViewController.swift; sourceTree = "<group>"; };
+		8FD8400B2C00899C0072B626 /* FDEVoiceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDEVoiceTableViewCell.swift; sourceTree = "<group>"; };
 		B6B0A6ED0AFF003B2F662837 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -90,6 +107,7 @@
 				8FBDC8B728E6E73F006392B8 /* AppDelegate.swift */,
 				8FBDC8B928E6E73F006392B8 /* FDEHomeViewController.swift */,
 				8FBDC8BB28E6E73F006392B8 /* FDEDetailViewController.swift */,
+				8FD840092C00890B0072B626 /* FDEVoiceListViewController.swift */,
 				8FBDC8BD28E6E73F006392B8 /* FDEMessageViewController.swift */,
 				8FBDC8BF28E6E73F006392B8 /* FDEMineViewController.swift */,
 				8FBDC8C128E6E73F006392B8 /* FDETabBarController.swift */,
@@ -97,11 +115,20 @@
 				8FBDC8C528E6E73F006392B8 /* FDENavigationController.swift */,
 				8FBDC8C728E6E73F006392B8 /* DLog.swift */,
 				8FBDC8C928E6E73F006392B8 /* FDEItemModel.swift */,
+				8FD8400B2C00899C0072B626 /* FDEVoiceTableViewCell.swift */,
+				8F1BA0E52C008B0B00A61AB1 /* SYAVoiceTextView.swift */,
+				8F1BA0EB2C00997600A61AB1 /* FDEVoiceModel.swift */,
+				8F1BA0ED2C0099E900A61AB1 /* voiceList.json */,
+				8F1BA0E82C008C7100A61AB1 /* ZAELabel.h */,
+				8F1BA0E92C008C7100A61AB1 /* ZAELabel.m */,
+				8F1BA0EF2C009D6600A61AB1 /* FDEUtils.h */,
+				8F1BA0F02C009D6600A61AB1 /* FDEUtils.m */,
 				8FB4D0F22BB5B65E00BA73E8 /* 咚咚.mp3 */,
 				8FB4D0F12BB5B65E00BA73E8 /* 键盘打字音效.wav */,
 				8FBDC8CB28E6E740006392B8 /* Assets.xcassets */,
 				8FBDC8CD28E6E740006392B8 /* LaunchScreen.storyboard */,
 				8FBDC8D028E6E740006392B8 /* Info.plist */,
+				8F1BA0E72C008C7000A61AB1 /* Example-Bridging-Header.h */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -149,6 +176,7 @@
 				TargetAttributes = {
 					8FBDC8B328E6E73F006392B8 = {
 						CreatedOnToolsVersion = 14.0.1;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -176,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FB4D0F42BB5B65E00BA73E8 /* 咚咚.mp3 in Resources */,
+				8F1BA0EE2C0099E900A61AB1 /* voiceList.json in Resources */,
 				8FB4D0F32BB5B65E00BA73E8 /* 键盘打字音效.wav in Resources */,
 				8FBDC8CC28E6E740006392B8 /* Assets.xcassets in Resources */,
 				8FBDC8CF28E6E740006392B8 /* LaunchScreen.storyboard in Resources */,
@@ -233,14 +262,20 @@
 			files = (
 				8FBDC8BE28E6E73F006392B8 /* FDEMessageViewController.swift in Sources */,
 				8FBDC8B828E6E73F006392B8 /* AppDelegate.swift in Sources */,
+				8FD8400A2C00890B0072B626 /* FDEVoiceListViewController.swift in Sources */,
 				8FBDC8C028E6E73F006392B8 /* FDEMineViewController.swift in Sources */,
 				8FBDC8C828E6E73F006392B8 /* DLog.swift in Sources */,
+				8F1BA0F12C009D6600A61AB1 /* FDEUtils.m in Sources */,
 				8FBDC8C628E6E73F006392B8 /* FDENavigationController.swift in Sources */,
+				8FD8400C2C00899C0072B626 /* FDEVoiceTableViewCell.swift in Sources */,
 				8FBDC8C228E6E73F006392B8 /* FDETabBarController.swift in Sources */,
 				8FBDC8CA28E6E73F006392B8 /* FDEItemModel.swift in Sources */,
+				8F1BA0EA2C008C7100A61AB1 /* ZAELabel.m in Sources */,
 				8FBDC8C428E6E73F006392B8 /* FDEBaseViewController.swift in Sources */,
 				8FBDC8BA28E6E73F006392B8 /* FDEHomeViewController.swift in Sources */,
+				8F1BA0E62C008B0B00A61AB1 /* SYAVoiceTextView.swift in Sources */,
 				8FBDC8BC28E6E73F006392B8 /* FDEDetailViewController.swift in Sources */,
+				8F1BA0EC2C00997600A61AB1 /* FDEVoiceModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +413,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 23DWX64F7P;
@@ -396,6 +432,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = xq.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -407,6 +445,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 23DWX64F7P;
@@ -425,6 +464,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = xq.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

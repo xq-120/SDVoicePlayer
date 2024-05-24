@@ -3,4 +3,7 @@ use_frameworks!
 
 target 'Example' do
   pod 'SDVoicePlayer', :path => '../'
+  pod 'SDWebImage'
+  pod 'SnapKit'
+  pod 'YYModel'
 end

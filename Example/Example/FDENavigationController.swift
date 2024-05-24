@@ -12,8 +12,15 @@ class FDENavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .white
+            navigationBar.standardAppearance = appearance
+            navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
+        } else {
+            
+        }
     }
     
 

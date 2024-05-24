@@ -1,14 +1,25 @@
 PODS:
   - GCDWeakTimer (1.0.0)
-  - SDVoicePlayer (1.0.0):
+  - SDVoicePlayer (1.4.0):
     - GCDWeakTimer (~> 1.0.0)
+  - SDWebImage (5.19.2):
+    - SDWebImage/Core (= 5.19.2)
+  - SDWebImage/Core (5.19.2)
+  - SnapKit (5.6.0)
+  - YYModel (1.0.4)
 
 DEPENDENCIES:
   - SDVoicePlayer (from `../`)
+  - SDWebImage
+  - SnapKit
+  - YYModel
 
 SPEC REPOS:
   trunk:
     - GCDWeakTimer
+    - SDWebImage
+    - SnapKit
+    - YYModel
 
 EXTERNAL SOURCES:
   SDVoicePlayer:
@@ -16,8 +27,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   GCDWeakTimer: 2529549030efc7fd0be9a90326d5f31539ca4d0f
-  SDVoicePlayer: cc85b00b55daf9025746b88c7e5a7a693bb28b7d
+  SDVoicePlayer: 983c87ea370bea4d5f928121b5ca2ce0b2141896
+  SDWebImage: dfe95b2466a9823cf9f0c6d01217c06550d7b29a
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 58ebca7fa3ecf9b1c56db3b33585e34df4e13d73
+PODFILE CHECKSUM: deed08ba13e54d13520a7d21a2d4e7b65a3ecdd4
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
