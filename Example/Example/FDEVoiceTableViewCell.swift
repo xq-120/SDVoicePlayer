@@ -44,7 +44,11 @@ class FDEVoiceTableViewCell: UITableViewCell {
     }
     
     func configureView(model: FDEVoiceModel, row: Int) {
-        let string = model.content + "--第\(row)个"
+        let string = "第\(row)个--\(Int(model.duration))s:\(getCellAdrress())--" + model.content
         self.voiceView.configureView(voiceURL: model.voiceURL, duration: Int(model.duration), translate: string)
+    }
+    
+    func getCellAdrress() -> String {
+        return "\(Unmanaged<AnyObject>.passUnretained(self).toOpaque())"
     }
 }

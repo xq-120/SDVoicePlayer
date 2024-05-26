@@ -9,6 +9,6 @@ import UIKit
 
 @objcMembers class FDEVoiceModel: NSObject {
     var voiceURL: String = ""
-    var duration: Float = 0
+    var duration: Double = 0
     var content: String = ""
 }

@@ -54,11 +54,11 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
             self.handlePlayVoice(with: sender, model: item)
         }
         if SDVoicePlayer.shared.isPlaying(url: item.voiceURL) {
-//            let playTimeChangedBlock = playTimeChangedBlock()
-//            let playCompletionBlock = playCompletionBlock()
-//            SDVoicePlayer.shared.setPlayTimeChanged(block: playTimeChangedBlock)
-//            SDVoicePlayer.shared.setPlayCompletion(block: playCompletionBlock)
-//            cell.voiceView.startVoiceAnimate()
+            let playTimeChangedBlk = getPlayTimeChangedBlock(with: cell)
+            let PlayCompletionBlk = getPlayCompletionBlock(with: cell)
+            SDVoicePlayer.shared.setPlayTimeChanged(block: playTimeChangedBlk)
+            SDVoicePlayer.shared.setPlayCompletion(block: PlayCompletionBlk)
+            cell.voiceView.startVoiceAnimate()
         }
         return cell
     }
@@ -72,35 +72,48 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
             } else {
                 cell.voiceView.startVoiceAnimate()
             }
-            
-            SDVoicePlayer.shared.play(voice: model.voiceURL, downloadProgress: { [weak cell] voiceURL, progress in
-                guard let cell = cell else {return}
-                
-            }, voiceConvertHandler: nil, playTimeChanged: { [weak cell] voiceURL, currentTime, duration in
-                guard let cell = cell else {return}
-                cell.voiceView.startVoiceAnimate()
-                
-                if voiceURL != model.voiceURL {
-                    cell.voiceView.stopVoiceAnimate()
-                    return
-                }
-                let serverDuration: Double = duration
-                cell.voiceView.durationLabel.text = "\(Int(max(0, serverDuration - currentTime)))s"
-            }) { [weak cell] voiceURL, err in
-                guard let cell = cell else {return}
-                
-                cell.voiceView.stopVoiceAnimate()
-                cell.voiceView.durationLabel.text = "\(Int(model.duration))s"
-                
-                if voiceURL != model.voiceURL {
-                    return
-                }
-                if err != nil {
-                    DLog("error:\(err!.localizedDescription)")
-                }
-            }
+            let playTimeChangedBlk = getPlayTimeChangedBlock(with: cell)
+            let PlayCompletionBlk = getPlayCompletionBlock(with: cell)
+            SDVoicePlayer.shared.play(voice: model.voiceURL, downloadProgress: nil, voiceConvertHandler: nil, playTimeChanged: playTimeChangedBlk, playCompletion: PlayCompletionBlk)
         }
-        
+    }
+    
+    func getPlayTimeChangedBlock(with cell: FDEVoiceTableViewCell) -> ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void) {
+        let block: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void) = { [weak self, weak cell] voiceURL, currentTime, duration in
+            guard let self = self, let cell = cell else {return}
+            let indexPath = self.tableView.indexPath(for: cell)
+            if indexPath == nil {
+                return
+            }
+            let item = self.dataList[indexPath!.row]
+            if voiceURL != item.voiceURL {
+                return
+            }
+            cell.voiceView.startVoiceAnimate()
+            let serverDuration: Double = item.duration
+            cell.voiceView.durationLabel.text = "\(Int(ceil(max(0, serverDuration - currentTime))))s"
+        }
+        return block
+    }
+    
+    func getPlayCompletionBlock(with cell: FDEVoiceTableViewCell) -> ((_ voiceURL: String?, _ err: Error?) -> Void) {
+        let block: ((_ voiceURL: String?, _ err: Error?) -> Void) = { [weak self, weak cell] voiceURL, err in
+            guard let self = self, let cell = cell else {return}
+            if err != nil {
+                DLog("error:\(err!.localizedDescription)")
+            }
+            let indexPath = self.tableView.indexPath(for: cell)
+            if indexPath == nil {
+                return
+            }
+            let item = self.dataList[indexPath!.row]
+            if voiceURL != item.voiceURL {
+                return
+            }
+            cell.voiceView.stopVoiceAnimate()
+            cell.voiceView.durationLabel.text = "\(Int(item.duration))s"
+        }
+        return block
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
