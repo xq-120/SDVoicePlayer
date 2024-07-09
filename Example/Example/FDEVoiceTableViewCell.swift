@@ -20,6 +20,8 @@ class FDEVoiceTableViewCell: UITableViewCell {
     }()
     
     @objc var playActionBlk: ((FDEVoiceTableViewCell)->Void)? = nil
+    
+    var voice: FDEVoiceModel? = nil
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -41,10 +43,12 @@ class FDEVoiceTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.voiceView.stopVoiceAnimate()
+        self.voice = nil
     }
     
     func configureView(model: FDEVoiceModel, row: Int) {
         let string = "第\(row)个--\(Int(model.duration))s:\(getCellAdrress())--" + model.content
+        self.voice = model
         self.voiceView.configureView(voiceURL: model.voiceURL, duration: Int(model.duration), translate: string)
     }
     

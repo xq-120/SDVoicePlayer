@@ -49,17 +49,74 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
         let item = dataList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "FDEVoiceTableViewCell", for: indexPath) as! FDEVoiceTableViewCell
         cell.configureView(model: item, row: indexPath.row)
+        
+//        cell.playActionBlk = { [weak self] sender in
+//            guard let self = self else {return}
+//            self.handlePlayVoice(with: sender, model: item)
+//        }
+//        if SDVoicePlayer.shared.isPlaying(url: item.voiceURL) { //
+//            let playTimeChangedBlk = getPlayTimeChangedBlock(with: cell)
+//            let PlayCompletionBlk = getPlayCompletionBlock(with: cell)
+//            SDVoicePlayer.shared.setPlayTimeChanged(block: playTimeChangedBlk)
+//            SDVoicePlayer.shared.setPlayCompletion(block: PlayCompletionBlk)
+//            cell.voiceView.startVoiceAnimate()
+//        }
+        
         cell.playActionBlk = { [weak self] sender in
             guard let self = self else {return}
-            self.handlePlayVoice(with: sender, model: item)
+            self.handlePlayVoiceV2(with: sender, model: item)
         }
         if SDVoicePlayer.shared.isPlaying(url: item.voiceURL) {
-            let playTimeChangedBlk = getPlayTimeChangedBlock(with: cell)
-            let PlayCompletionBlk = getPlayCompletionBlock(with: cell)
-            SDVoicePlayer.shared.setPlayTimeChanged(block: playTimeChangedBlk)
-            SDVoicePlayer.shared.setPlayCompletion(block: PlayCompletionBlk)
             cell.voiceView.startVoiceAnimate()
         }
+        return cell
+    }
+    
+    func handlePlayVoiceV2(with cell: FDEVoiceTableViewCell, model: FDEVoiceModel) {
+        if SDVoicePlayer.shared.isPlaying(url: model.voiceURL) {
+            SDVoicePlayer.shared.stop()
+        } else {
+            if !SDVoicePlayer.shared.isVoiceCached(url: model.voiceURL) {
+                cell.voiceView.startLoading()
+            } else {
+                cell.voiceView.startVoiceAnimate()
+            }
+            
+            SDVoicePlayer.shared.play(voice: model.voiceURL, downloadProgress: nil, voiceConvertHandler: nil) { [weak self] voiceURL, currentTime, duration in
+                guard let self = self else {
+                    return
+                }
+                guard let destCell = self.getCell(with: model) else { //根据model获取正确行的cell。如果cell不在屏幕上则会返回nil。
+                    return
+                }
+                if destCell.voice?.voiceURL != voiceURL { //这里基本上不会进来，因为cellForRow里有赋值voice。
+                    DLog("语音不一致，destCell：\(destCell.getCellAdrress())")
+                    return
+                }
+                destCell.voiceView.startVoiceAnimate()
+                let serverDuration: Double = model.duration
+                destCell.voiceView.durationLabel.text = "\(Int(ceil(max(0, serverDuration - currentTime))))s"
+            } playCompletion: { [weak self] voiceURL, err in
+                guard let self = self else {
+                    return
+                }
+                guard let destCell = self.getCell(with: model) else {
+                    return
+                }
+                if destCell.voice?.voiceURL != voiceURL {
+                    DLog("语音不一致，destCell：\(destCell.getCellAdrress())")
+                    return
+                }
+                destCell.voiceView.stopVoiceAnimate()
+                destCell.voiceView.durationLabel.text = "\(Int(model.duration))s"
+            }
+        }
+    }
+    
+    func getCell(with voice: FDEVoiceModel) -> FDEVoiceTableViewCell? {
+        guard let voiceIndex = self.dataList.firstIndex(of: voice) else {return nil}
+        let indexPath = IndexPath(row: voiceIndex, section: 0)
+        let cell = self.tableView.cellForRow(at: indexPath) as? FDEVoiceTableViewCell
         return cell
     }
     
