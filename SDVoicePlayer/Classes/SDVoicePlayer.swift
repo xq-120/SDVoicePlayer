@@ -115,7 +115,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
         return playing
     }
     
-    //更新回调。比如tableView滚动时，可能需要更新回调
+    //更新回调。
     @objc public func setPlayTimeChanged(block: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?) {
         self.playingQueue.async {
             self.playTimeChanged = block
