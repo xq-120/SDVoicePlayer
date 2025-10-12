@@ -8,7 +8,7 @@
 import Foundation
 
 class SDVoiceUtils {
-    static func getCacheVoiceDirectory() -> String {
+    static func getResourceCacheDirectory() -> String {
         let folderPath = "\(NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!)".appendingPathComponent("Voice")
         return folderPath
     }
@@ -29,9 +29,9 @@ class SDVoiceUtils {
         }
     }
     
-    static func mappedVoiceFilePath(url: String) -> String {
+    static func mappedResourceFilePath(url: String) -> String {
         let filename = url.md5
-        let filePath = getCacheVoiceDirectory().appendingPathComponent(filename)
+        let filePath = getResourceCacheDirectory().appendingPathComponent(filename)
         return filePath
     }
 }

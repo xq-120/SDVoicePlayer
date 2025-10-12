@@ -1,14 +1,14 @@
 //
-//  SDVoiceDownloadManager.swift
+//  SDResourceDownloadManager.swift
 //  SDVoicePlayer
 //
-//  Created by 薛权 on 2025/9/7.
+//  Created by uzzi on 2025/9/7.
 //
 
 import Foundation
 
-class SDVoiceDownloadManager: NSObject, URLSessionDownloadDelegate {
-    public static let shared = SDVoiceDownloadManager()
+class SDResourceDownloadManager: NSObject, URLSessionDownloadDelegate {
+    public static let shared = SDResourceDownloadManager()
     
     public var maxDownloads = 3 {
         didSet {
@@ -25,19 +25,16 @@ class SDVoiceDownloadManager: NSObject, URLSessionDownloadDelegate {
         queue.maxConcurrentOperationCount = maxDownloads
     }
     
-    public func download(voice: URL?, progressBlk: ((_ voiceURL: String?, _ progress: Float) -> Void)?, completion: ((_ voiceURL: String?, _ filePath: String?, _ error: Error?) -> Void)?) {
-        if voice == nil {
-            return
-        }
-        
-        let op = SDVoiceDownloadOperation.init(voiceURL: voice, progress: progressBlk, completion: completion, session: session)
+    public func download(resourceURL: URL,
+                         progress: ((_ resourceURL: String?, _ progress: Float) -> Void)? = nil,
+                         convert: ((_ resourceURL: String?, _ filePath: String?) -> String?)? = nil,
+                         completion: ((_ resourceURL: String?, _ filePath: String?, _ error: Error?) -> Void)?) {
+        let op = SDResourceDownloadOperation.init(resourceURL: resourceURL, progress: progress, completion: completion, session: session)
         queue.addOperation(op)
     }
     
-    public func cancelDownload(voice: URL?) {
-        if voice == nil {
-            return
-        }
+    public func cancelDownload(voice: URL) {
+        
     }
     
     public func cancelAllDownload() {

@@ -1,14 +1,14 @@
 //
-//  SDVoiceCacheManager.swift
+//  SDResourceCacheManager.swift
 //  SDVoicePlayer
 //
-//  Created by 薛权 on 2025/9/7.
+//  Created by uzzi on 2025/9/7.
 //
 
 import Foundation
 
-class SDVoiceCacheManager: NSObject {
-    public static let shared = SDVoiceCacheManager()
+class SDResourceCacheManager: NSObject {
+    public static let shared = SDResourceCacheManager()
     
     private let ioQueue = DispatchQueue.init(label: "com.VoicePlayer.cacheSerialQueue")
     
@@ -17,7 +17,7 @@ class SDVoiceCacheManager: NSObject {
         
         ioQueue.setAsSpecific()
         
-        let folderPath = SDVoiceUtils.getCacheVoiceDirectory()
+        let folderPath = SDVoiceUtils.getResourceCacheDirectory()
         if !FileManager.default.fileExists(atPath: folderPath) {
             try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: folderPath), withIntermediateDirectories: true)
         }
@@ -25,14 +25,14 @@ class SDVoiceCacheManager: NSObject {
     
     // MARK: Cache
     @objc public func isVoiceCached(url: String) -> Bool {
-        let filePath = SDVoiceUtils.mappedVoiceFilePath(url: url)
+        let filePath = SDVoiceUtils.mappedResourceFilePath(url: url)
         return ioQueue.syncSafe({ FileManager.default.fileExists(atPath: filePath) })
     }
     
     @objc public func getCachedVoice(for url: String) -> String? {
         var filePath: String? = nil
         if isVoiceCached(url: url) {
-            filePath = SDVoiceUtils.mappedVoiceFilePath(url: url)
+            filePath = SDVoiceUtils.mappedResourceFilePath(url: url)
         }
         return filePath
     }
@@ -47,7 +47,7 @@ class SDVoiceCacheManager: NSObject {
     @objc public func clearAllCache() {
         ioQueue.async { [weak self] in
             guard let self = self else {return}
-            let folderPath = SDVoiceUtils.getCacheVoiceDirectory()
+            let folderPath = SDVoiceUtils.getResourceCacheDirectory()
             do {
                 // 获取文件夹中的所有内容
                 let filePaths = try FileManager.default.contentsOfDirectory(atPath: folderPath)

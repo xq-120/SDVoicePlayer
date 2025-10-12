@@ -64,9 +64,9 @@ private let kPlayErrorDesc = "播放失败，请重试"
     private var downloadTask: URLSessionDownloadTask?
     private lazy var session: URLSession = URLSession.init(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
     
-    private lazy var downloadManager: SDVoiceDownloadManager = SDVoiceDownloadManager.shared
+    private lazy var downloadManager: SDResourceDownloadManager = SDResourceDownloadManager.shared
     
-    private lazy var cacheManager: SDVoiceCacheManager = SDVoiceCacheManager.shared
+    private lazy var cacheManager: SDResourceCacheManager = SDResourceCacheManager.shared
     
     private override init() {
         super.init()
@@ -155,7 +155,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
                 self.downloadManager.cancelDownload(voice: URL.init(string: prePlayURL ?? ""))
                 
                 // 下载现在的语音
-                self.downloadManager.download(voice: voiceURL, progressBlk: downloadProgress) { voiceURL, filePath, error in
+                self.downloadManager.download(resourceURL: voiceURL, progress: downloadProgress) { voiceURL, filePath, error in
                     
                 }
             } else {
@@ -295,7 +295,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
             }
             
             if error == nil {
-                let srcFilePath = SDVoiceUtils.mappedVoiceFilePath(url: url.absoluteString)
+                let srcFilePath = SDVoiceUtils.mappedResourceFilePath(url: url.absoluteString)
                 let voiceConvertHandler = self.voiceConvertHandler ?? self.defaultVoiceConvertHandler
                 if let convertHandler = voiceConvertHandler, let convertedVoicePath = convertHandler(self.currentURL, srcFilePath), convertedVoicePath != srcFilePath {
                     //替换掉之前的缓存
