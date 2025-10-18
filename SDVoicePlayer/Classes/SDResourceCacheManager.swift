@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SDResourceCacheManager: NSObject {
+public class SDResourceCacheManager: NSObject {
     public static let shared = SDResourceCacheManager()
     
     private let ioQueue = DispatchQueue.init(label: "com.VoicePlayer.cacheSerialQueue")
@@ -45,7 +45,7 @@ class SDResourceCacheManager: NSObject {
     }
     
     @objc public func clearAllCache() {
-        ioQueue.async { 
+        ioQueue.async {
             let folderPath = SDVoiceUtils.getResourceCacheDirectory()
             do {
                 // 获取文件夹中的所有内容

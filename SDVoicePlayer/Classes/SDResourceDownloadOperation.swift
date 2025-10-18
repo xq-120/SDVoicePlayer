@@ -11,11 +11,11 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     
     var resourceURL: String
     
-    var progressBlk: ((_ resourceURL: String?, _ progress: Float) -> Void)?
+    var progressBlk: ((_ resourceURL: String, _ progress: Float) -> Void)?
     
-    var convertBlk: ((_ resourceURL: String?, _ filePath: String?) -> String?)?
+    var convertBlk: ((_ resourceURL: String, _ filePath: String) -> String?)?
     
-    var completionBlk: ((_ resourceURL: String?, _ filePath: String?, _ error: Error?) -> Void)?
+    var completionBlk: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)?
     
     private weak var session: URLSession?
     
@@ -50,9 +50,9 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     }
     
     init(resourceURL: String,
-         progress: ((_ resourceURL: String?, _ progress: Float) -> Void)? = nil,
-         convert: ((_ resourceURL: String?, _ filePath: String?) -> String?)? = nil,
-         completion: ((_ resourceURL: String?, _ filePath: String?, _ error: Error?) -> Void)? = nil,
+         progress: ((_ resourceURL: String, _ progress: Float) -> Void)? = nil,
+         convert: ((_ resourceURL: String, _ filePath: String) -> String?)? = nil,
+         completion: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)? = nil,
          session: URLSession? = nil) {
         self.resourceURL = resourceURL
         self.progressBlk = progress
@@ -135,7 +135,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
             }
             done()
         } else {
-            var destLoc: String = SDVoiceUtils.mappedResourceFilePath(url: resourceURL)
+            let destLoc: String = SDVoiceUtils.mappedResourceFilePath(url: resourceURL)
             if let convertBlk = convertBlk, let convertedPath = convertBlk(resourceURL, destLoc) {
                 //替换掉之前的缓存
                 try? FileManager.default.moveItem(atPath: convertedPath, toPath: destLoc)

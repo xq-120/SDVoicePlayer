@@ -28,7 +28,8 @@ import GCDWeakTimer
 private let kErrorDomain = "com.SDVoicePlayer.www"
 private let kPlayErrorDesc = "播放失败，请重试"
 
-@objc public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate, URLSessionDownloadDelegate {
+@objc public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate {
+    
     @objc public static let shared = SDVoicePlayer()
     
     private var player: AVAudioPlayer?
@@ -45,15 +46,11 @@ private let kPlayErrorDesc = "播放失败，请重试"
     @objc public var duration: TimeInterval = 0
     
     /// 下载完成后默认的转换处理
-    @objc public var defaultVoiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?
-    
-    private var voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?
+    @objc public var defaultVoiceConvertBlock: ((_ voiceURL: String, _ filePath: String) -> String?)?
     
     private var playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?
     
-    private var playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?
-    
-    private var downloadProgress: ((_ voiceURL: String?, _ progress: Float) -> Void)?
+    private var playCompletion: ((_ voiceURL: String?, _ error: Error?) -> Void)?
     
     private let playerQueue = DispatchQueue.init(label: "com.VoicePlayer.playerSerialQueue")
     
@@ -61,12 +58,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
         
     private var timer: GCDWeakTimer?
     
-    private var downloadTask: URLSessionDownloadTask?
-    private lazy var session: URLSession = URLSession.init(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
-    
-    private lazy var downloadManager: SDResourceDownloadManager = SDResourceDownloadManager.shared
-    
-    private lazy var cacheManager: SDResourceCacheManager = SDResourceCacheManager.shared
+    private lazy var resourceManager: SDResourceManager = SDResourceManager.shared
     
     private override init() {
         super.init()
@@ -85,7 +77,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
     
     @objc func handleEnterBackground(notification: Notification) {
         if self.isPlaying() && self.isStopWhenEnterBackground {
-            self.stop(completion: nil, error: nil)
+            self.stop(with: nil)
         }
     }
     
@@ -98,36 +90,38 @@ private let kPlayErrorDesc = "播放失败，请重试"
     }
     
     @objc public func isDownloading(url: String) -> Bool {
-        return playerQueue.syncSafe { self.downloadTask != nil && url == self.currentURL }
+        return playerQueue.syncSafe { url == self.currentURL }
     }
     
-    //更新回调。
+    // 更新回调。
     @objc public func setPlayTimeChanged(block: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?) {
         self.playerQueue.async {
             self.playTimeChanged = block
         }
     }
     
-    //更新回调。
+    // 更新回调。
     @objc public func setPlayCompletion(block: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
         self.playerQueue.async {
             self.playCompletion = block
         }
     }
     
-    @objc public func play(voice url: String,
-                           voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?,
+    @objc public func play(voiceURL: String,
                            playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?,
-                           playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
-        
-        self.play(voice: url, downloadProgress: nil, voiceConvertHandler: voiceConvertHandler, playTimeChanged: playTimeChanged, playCompletion: playCompletion)
+                           playCompletion: ((_ voiceURL: String?, _ error: Error?) -> Void)?) {
+        self.play(voiceURL: voiceURL,
+                  downloadProgress: nil,
+                  voiceConvertBlock: nil,
+                  playTimeChanged: playTimeChanged,
+                  playCompletion: playCompletion)
     }
     
-    @objc public func play(voice url: String,
+    @objc public func play(voiceURL: String,
                            downloadProgress: ((_ voiceURL: String?, _ progress: Float) -> Void)?,
-                           voiceConvertHandler: ((_ voiceURL: String?, _ srcPath: String?) -> String?)?,
+                           voiceConvertBlock: ((_ voiceURL: String, _ srcPath: String) -> String?)?,
                            playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?,
-                           playCompletion: ((_ voiceURL: String?, _ err: Error?) -> Void)?) {
+                           playCompletion: ((_ voiceURL: String?, _ error: Error?) -> Void)?) {
         self.playerQueue.async {
             //停止当前播放的语音
             let prePlayCompletion = self.playCompletion
@@ -137,31 +131,47 @@ private let kPlayErrorDesc = "播放失败，请重试"
                 prePlayCompletion?(prePlayURL, nil)
             }
             
-            self.currentURL = url
-            self.voiceConvertHandler = voiceConvertHandler
+            self.currentURL = voiceURL
             self.playTimeChanged = playTimeChanged
             self.playCompletion = playCompletion
-            self.downloadProgress = downloadProgress
             self._isPlaying = true
             
-            if !url.lowercased().hasPrefix("http") { //播放本地文件
-                let voiceURL = URL.init(fileURLWithPath: url)
-                self.playVoice(fileURL: voiceURL)
-            } else if let cachedPath = self.cacheManager.getCachedVoice(for: url) { //播放缓存
-                let voiceURL = URL.init(fileURLWithPath: cachedPath)
-                self.playVoice(fileURL: voiceURL)
-            } else if let voiceURL = URL.init(string: url) {
+            if !voiceURL.lowercased().hasPrefix("http") { //播放本地文件
+                let playURL = URL.init(fileURLWithPath: voiceURL)
+                self.playVoice(fileURL: playURL)
+            } else if let cachedPath = self.resourceManager.getCachedVoice(for: voiceURL) { //播放缓存
+                let playURL = URL.init(fileURLWithPath: cachedPath)
+                self.playVoice(fileURL: playURL)
+            } else if let _ = URL.init(string: voiceURL) {
                 // 取消之前的下载
-                self.downloadManager.cancelDownload(voice: URL.init(string: prePlayURL ?? ""))
+                self.resourceManager.cancelDownload(resourceURL: prePlayURL ?? "")
                 
                 // 下载现在的语音
-                self.downloadManager.download(resourceURL: voiceURL, progress: downloadProgress) { voiceURL, filePath, error in
+                let convertBlk = voiceConvertBlock ?? self.defaultVoiceConvertBlock
+                self.resourceManager.loadResource(resourceURL: voiceURL, progress: downloadProgress, convert: convertBlk) { [weak self] resourceURL, filePath, error in
+                    guard let self = self else { return }
                     
+                    self.playerQueue.async {
+                        if !self._isPlaying || self.currentURL != resourceURL {
+                            return
+                        }
+                        
+                        if let fp = filePath {
+                            let fileURL = URL.init(fileURLWithPath: fp)
+                            self.playVoice(fileURL: fileURL)
+                        } else {
+                            //下载失败就不用播放,直接stop并回调
+                            self.internalStop()
+                            DispatchQueue.main.async {
+                                playCompletion?(self.currentURL, error)
+                            }
+                        }
+                    }
                 }
             } else {
                 self.internalStop()
                 DispatchQueue.main.async {
-                    playCompletion?(url, NSError.getErrorWithCode(code: .invalidURL))
+                    playCompletion?(voiceURL, NSError.getErrorWithCode(code: .invalidURL))
                 }
             }
         }
@@ -170,21 +180,23 @@ private let kPlayErrorDesc = "播放失败，请重试"
     private func playVoice(fileURL: URL) {
         self.player = try? AVAudioPlayer.init(contentsOf: fileURL)
         if self.player == nil {
-            self.stop(completion: nil, error: NSError.getErrorWithCode(code: .decodeFailed))
+            self.stop(with: NSError.getErrorWithCode(code: .decodeFailed))
             return
         }
         self.setupAudioSession()
         self.player?.delegate = self
         self.player?.prepareToPlay()
         self.duration = self.player?.duration ?? 0
-        self.play()
+        self.play(atTime: 0)
     }
     
     private func play(atTime: TimeInterval = 0) {
+        guard let player = self.player else { return }
+        
         if atTime == 0 {
-            self.player?.play()
+            player.play()
         } else {
-            self.player?.play(atTime: atTime)
+            player.play(atTime: atTime)
         }
         self.playState = .playing
         self.startTimer()
@@ -214,6 +226,15 @@ private let kPlayErrorDesc = "播放失败，请重试"
         }
     }
     
+    @objc public func play() {
+        self.playerQueue.async {
+            if self.player == nil {
+                return
+            }
+            self.play(atTime: 0)
+        }
+    }
+    
     @objc public func pause() {
         self.playerQueue.async {
             if self.player == nil {
@@ -225,28 +246,17 @@ private let kPlayErrorDesc = "播放失败，请重试"
         }
     }
     
-    @objc public func play() {
-        self.playerQueue.async {
-            if self.player == nil {
-                return
-            }
-            self.play(atTime: 0)
-        }
-    }
-    
-    /// 调用stop后，会回调播放完成回调
     @objc public func stop() {
-        self.stop(completion: nil, error: nil)
+        self.stop(with: nil)
     }
     
-    private func stop(completion: (()->Void)?, error: Error?) {
+    private func stop(with error: Error?) {
         self.playerQueue.async {
-            let prePlayCompletion = self.playCompletion
-            let prePlayURL = self.currentURL
+            let playCompletion = self.playCompletion
+            let playURL = self.currentURL
             self.internalStop()
             DispatchQueue.main.async {
-                prePlayCompletion?(prePlayURL, error)
-                completion?()
+                playCompletion?(playURL, error)
             }
         }
     }
@@ -267,55 +277,15 @@ private let kPlayErrorDesc = "播放失败，请重试"
         
         self.playTimeChanged = nil
         self.playCompletion = nil
-        self.voiceConvertHandler = nil
-        self.downloadProgress = nil
     }
 
     // MARK: AVAudioPlayerDelegate
     public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        self.stop(completion: nil, error: NSError.getErrorWithCode(code: .decodeFailed))
+        self.stop(with: NSError.getErrorWithCode(code: .decodeFailed))
     }
     
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        self.stop(completion: nil, error: nil)
-    }
-    
-    // MARK: URLSessionDownloadDelegate
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        guard let url = task.originalRequest?.url else { return }
-        self.playerQueue.async {
-            if let err = error as? NSError, err.code == NSURLErrorCancelled {
-                return
-            }
-            
-            self.downloadTask = nil
-            
-            if !self._isPlaying || self.currentURL != url.absoluteString {
-                return
-            }
-            
-            if error == nil {
-                let srcFilePath = SDVoiceUtils.mappedResourceFilePath(url: url.absoluteString)
-                let voiceConvertHandler = self.voiceConvertHandler ?? self.defaultVoiceConvertHandler
-                if let convertHandler = voiceConvertHandler, let convertedVoicePath = convertHandler(self.currentURL, srcFilePath), convertedVoicePath != srcFilePath {
-                    //替换掉之前的缓存
-                    try? FileManager.default.moveItem(atPath: convertedVoicePath, toPath: srcFilePath)
-                }
-                let destLoc = URL.init(fileURLWithPath: srcFilePath)
-                self.playVoice(fileURL: destLoc)
-            } else {
-                //下载失败就不用播放,直接stop并回调
-                self.stop(completion: nil, error: NSError.getErrorWithCode(code: .downloadFailed))
-            }
-        }
-    }
-    
-    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        
-    }
-    
-    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        
+        self.stop(with: nil)
     }
 }
 
