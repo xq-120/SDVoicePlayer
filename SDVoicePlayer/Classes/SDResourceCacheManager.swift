@@ -45,8 +45,7 @@ class SDResourceCacheManager: NSObject {
     }
     
     @objc public func clearAllCache() {
-        ioQueue.async { [weak self] in
-            guard let self = self else {return}
+        ioQueue.async { 
             let folderPath = SDVoiceUtils.getResourceCacheDirectory()
             do {
                 // 获取文件夹中的所有内容

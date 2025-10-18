@@ -8,49 +8,117 @@
 import Foundation
 
 class SDResourceDownloadManager: NSObject, URLSessionDownloadDelegate {
+    
     public static let shared = SDResourceDownloadManager()
     
     public var maxDownloads = 3 {
         didSet {
-            queue.maxConcurrentOperationCount = maxDownloads
+            downloadQueue.maxConcurrentOperationCount = maxDownloads
         }
     }
     
-    private var queue = OperationQueue.init()
+    private var downloadQueue = OperationQueue.init()
     
     private lazy var session: URLSession = URLSession.init(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
     
+    private var operationDict: [String: SDResourceDownloadOperation] = [:]
+    
+    private var lock: NSLock = NSLock.init()
+    
     private override init() {
         super.init()
-        queue.maxConcurrentOperationCount = maxDownloads
+        downloadQueue.maxConcurrentOperationCount = maxDownloads
     }
     
-    public func download(resourceURL: URL,
+    public func download(resourceURL: String,
                          progress: ((_ resourceURL: String?, _ progress: Float) -> Void)? = nil,
                          convert: ((_ resourceURL: String?, _ filePath: String?) -> String?)? = nil,
                          completion: ((_ resourceURL: String?, _ filePath: String?, _ error: Error?) -> Void)?) {
-        let op = SDResourceDownloadOperation.init(resourceURL: resourceURL, progress: progress, completion: completion, session: session)
-        queue.addOperation(op)
+        if resourceURL.isEmpty {
+            completion?(resourceURL, nil, NSError.getErrorWithCode(code: .invalidURL))
+            return
+        }
+        
+        if let op = getDownloadOperation(with: resourceURL) {
+            
+        } else {
+            let op = SDResourceDownloadOperation.init(resourceURL: resourceURL, progress: progress, completion: completion, session: session)
+            op.completionBlock = { [weak self] in
+                guard let self = self else { return }
+                removeDownloadOperation(with: resourceURL)
+            }
+            downloadQueue.addOperation(op)
+            setDownloadOperation(operation: op, with: resourceURL)
+        }
     }
     
-    public func cancelDownload(voice: URL) {
-        
+    private func getDownloadOperation(with resourceURL: String) -> SDResourceDownloadOperation? {
+        lock.withLock {
+            return operationDict[resourceURL]
+        }
+    }
+    
+    private func setDownloadOperation(operation: SDResourceDownloadOperation, with resourceURL: String) {
+        lock.withLock {
+            operationDict[resourceURL] = operation
+        }
+    }
+    
+    private func removeDownloadOperation(with resourceURL: String) {
+        lock.withLock {
+            operationDict[resourceURL] = nil
+        }
+    }
+    
+    public func cancelDownload(resourceURL: String) {
+        let operation = getDownloadOperation(with: resourceURL)
+        operation?.cancel()
+        removeDownloadOperation(with: resourceURL)
     }
     
     public func cancelAllDownload() {
+        var ops: [String: SDResourceDownloadOperation] = [:]
+        lock.withLock {
+            ops = operationDict
+        }
+        for (k, v) in ops {
+            v.cancel()
+        }
+        lock.withLock {
+            operationDict.removeAll()
+        }
+    }
+    
+    func operation(with task: URLSessionTask) -> SDResourceDownloadOperation? {
+        var returnOperation: SDResourceDownloadOperation?
         
+        for case let operation as SDResourceDownloadOperation in downloadQueue.operations {
+            var operationTask: URLSessionTask?
+            operation.lock.withLock {
+                operationTask = operation.downloadTask
+            }
+            if operationTask?.taskIdentifier == task.taskIdentifier {
+                returnOperation = operation
+                break
+            }
+        }
+        
+        return returnOperation
     }
     
     // MARK: URLSessionDownloadDelegate
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        
+        let operation = operation(with: task)
+        operation?.urlSession(session, task: task, didCompleteWithError: error)
     }
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        
+        let operation = operation(with: downloadTask)
+        operation?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
     }
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        
+        let operation = operation(with: downloadTask)
+        operation?.urlSession(session, downloadTask: downloadTask, didWriteData: bytesWritten, totalBytesWritten: totalBytesWritten, totalBytesExpectedToWrite: totalBytesExpectedToWrite)
     }
 }
