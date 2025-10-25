@@ -26,6 +26,8 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     private var _executing: Bool = false
     
     private var _finished: Bool = false
+    
+    private var callbackTokens: [SDResourceDownloadOperationToken] = []
 
     override private(set) var isExecuting: Bool {
         get { _executing }
@@ -55,10 +57,21 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
          completion: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)? = nil,
          session: URLSession? = nil) {
         self.resourceURL = resourceURL
-        self.progressBlk = progress
-        self.convertBlk = convert
-        self.completionBlk = completion
         self.session = session
+        super.init()
+        self.addHandler(progress: progress, convert: convert, completion: completion)
+    }
+    
+    func addHandler(progress: ((_ resourceURL: String, _ progress: Float) -> Void)? = nil,
+                    convert: ((_ resourceURL: String, _ filePath: String) -> String?)? = nil,
+                    completion: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)? = nil) {
+        let token = SDResourceDownloadOperationToken.init()
+        token.progressBlock = progress
+        token.convertBlock = convert
+        token.completedBlock = completion
+        lock.withLock {
+            callbackTokens.append(token)
+        }
     }
     
     override func start() {
@@ -70,11 +83,11 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
                 }
                 var error: Error? = nil
                 if isCancelled {
-                    error = NSError.getErrorWithCode(code: .downloadCancelled)
+                    error = NSError.getPlayerErrorWithCode(code: .downloadCancelled)
                 } else if taskURL == nil {
-                    error = NSError.getErrorWithCode(code: .invalidURL)
+                    error = NSError.getPlayerErrorWithCode(code: .invalidURL)
                 } else {
-                    error = NSError.getErrorWithCode(code: .unknown)
+                    error = NSError.getPlayerErrorWithCode(code: .unknown)
                 }
                 completionBlk?(resourceURL, nil, error)
                 return
@@ -102,7 +115,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
             if !isFinished { isFinished = true }
             
             //通知外部已经取消。
-            completionBlk?(resourceURL, nil, NSError.getErrorWithCode(code: .downloadCancelled))
+            completionBlk?(resourceURL, nil, NSError.getPlayerErrorWithCode(code: .downloadCancelled))
             
             reset()
         }
@@ -131,7 +144,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
         let resourceURL = resourceURL
         if error != nil {
             DispatchQueue.main.async {
-                completionBlk?(resourceURL, nil, NSError.getErrorWithCode(code: .downloadFailed))
+                completionBlk?(resourceURL, nil, NSError.getPlayerErrorWithCode(code: .downloadFailed))
             }
             done()
         } else {

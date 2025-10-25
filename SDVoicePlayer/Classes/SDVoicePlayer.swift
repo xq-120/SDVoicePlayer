@@ -2,13 +2,11 @@
 //  SDVoicePlayer.swift
 //  SDVoicePlayer
 //
-//  Created by xq on 2022/9/22.
+//  Created by uzzi on 2022/9/22.
 //
 
 import Foundation
 import AVFoundation
-import UIKit
-import CommonCrypto
 import GCDWeakTimer
 
 @objc public enum SDVoicePlayerStatus: Int {
@@ -118,7 +116,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
     }
     
     @objc public func play(voiceURL: String,
-                           downloadProgress: ((_ voiceURL: String?, _ progress: Float) -> Void)?,
+                           downloadProgress: ((_ voiceURL: String, _ progress: Float) -> Void)?,
                            voiceConvertBlock: ((_ voiceURL: String, _ srcPath: String) -> String?)?,
                            playTimeChanged: ((_ voiceURL: String?, _ currentTime: TimeInterval, _ duration: TimeInterval) -> Void)?,
                            playCompletion: ((_ voiceURL: String?, _ error: Error?) -> Void)?) {
@@ -171,7 +169,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
             } else {
                 self.internalStop()
                 DispatchQueue.main.async {
-                    playCompletion?(voiceURL, NSError.getErrorWithCode(code: .invalidURL))
+                    playCompletion?(voiceURL, NSError.getPlayerErrorWithCode(code: .invalidURL))
                 }
             }
         }
@@ -180,7 +178,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
     private func playVoice(fileURL: URL) {
         self.player = try? AVAudioPlayer.init(contentsOf: fileURL)
         if self.player == nil {
-            self.stop(with: NSError.getErrorWithCode(code: .decodeFailed))
+            self.stop(with: NSError.getPlayerErrorWithCode(code: .decodeFailed))
             return
         }
         self.setupAudioSession()
@@ -281,7 +279,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
 
     // MARK: AVAudioPlayerDelegate
     public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        self.stop(with: NSError.getErrorWithCode(code: .decodeFailed))
+        self.stop(with: NSError.getPlayerErrorWithCode(code: .decodeFailed))
     }
     
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
@@ -289,57 +287,15 @@ private let kPlayErrorDesc = "播放失败，请重试"
     }
 }
 
-internal extension String {
-    /// 原生md5
-    var md5: String {
-        guard let data = data(using: .utf8) else {
-            return self
-        }
-        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-
-        #if swift(>=5.0)
-        _ = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
-            return CC_MD5(bytes.baseAddress, CC_LONG(data.count), &digest)
-        }
-        #else
-        _ = data.withUnsafeBytes { bytes in
-            return CC_MD5(bytes, CC_LONG(data.count), &digest)
-        }
-        #endif
-
-        return digest.map { String(format: "%02x", $0) }.joined()
-    }
-    
-    func appendingPathComponent(_ str: String) -> String {
-        return (self as NSString).appendingPathComponent(str)
-    }
-}
-
-extension DispatchQueue {
-    private static var specificKey = DispatchSpecificKey<UUID>()
-    
-    func setAsSpecific() {
-        let id = UUID()
-        setSpecific(key: DispatchQueue.specificKey, value: id)
-    }
-    
-    private func isCurrentQueue() -> Bool {
-        guard let id = getSpecific(key: DispatchQueue.specificKey) else { return false }
-        return id == DispatchQueue.getSpecific(key: DispatchQueue.specificKey)
-    }
-    
-    func syncSafe<T>(_ block: () -> T) -> T {
-        if isCurrentQueue() {
-            return block()
-        } else {
-            return sync(execute: block)
-        }
+extension NSError {
+    static func errorWithDomain(domain: String, code: Int, description: String) -> NSError {
+        let err = NSError.init(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey: description])
+        return err
     }
 }
 
 extension NSError {
-    static func getErrorWithCode(code: SDVoicePlayerError) -> NSError {
-        let err = NSError.init(domain: kErrorDomain, code: code.rawValue, userInfo: [NSLocalizedDescriptionKey: kPlayErrorDesc])
-        return err
+    static func getPlayerErrorWithCode(code: SDVoicePlayerError) -> NSError {
+        return NSError.errorWithDomain(domain: kErrorDomain, code: code.rawValue, description: kPlayErrorDesc)
     }
 }

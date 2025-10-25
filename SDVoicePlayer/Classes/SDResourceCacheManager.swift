@@ -24,22 +24,22 @@ public class SDResourceCacheManager: NSObject {
     }
     
     // MARK: Cache
-    @objc public func isVoiceCached(url: String) -> Bool {
+    @objc public func isResourceCached(url: String) -> Bool {
         let filePath = SDVoiceUtils.mappedResourceFilePath(url: url)
         return ioQueue.syncSafe({ FileManager.default.fileExists(atPath: filePath) })
     }
     
-    @objc public func getCachedVoice(for url: String) -> String? {
+    @objc public func getCachedResourceFilePath(for url: String) -> String? {
         var filePath: String? = nil
-        if isVoiceCached(url: url) {
+        if isResourceCached(url: url) {
             filePath = SDVoiceUtils.mappedResourceFilePath(url: url)
         }
         return filePath
     }
     
-    @objc public func getCachedVoice(for url: String, completion: ((String?) -> Void)?) {
+    @objc public func getCachedResourceFilePath(for url: String, completion: ((String?) -> Void)?) {
         ioQueue.async {
-            let filePath = self.getCachedVoice(for: url)
+            let filePath = self.getCachedResourceFilePath(for: url)
             completion?(filePath)
         }
     }
@@ -55,7 +55,6 @@ public class SDResourceCacheManager: NSObject {
                     let fullPath = (folderPath as NSString).appendingPathComponent(filePath)
                     try FileManager.default.removeItem(atPath: fullPath)
                 }
-                print("文件夹中的文件已全部删除 ✅")
             } catch {
                 print("删除文件出错: \(error)")
             }
