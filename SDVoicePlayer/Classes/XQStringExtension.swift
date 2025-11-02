@@ -33,7 +33,8 @@ internal extension String {
         return (self as NSString).appendingPathComponent(str)
     }
     
-    /// 获取URL中资源的文件扩展名
+    /// 获取URL中资源的文件扩展名.
+    /// 比如 "http://www.example.com/somepath/test.txt",返回txt。
     func extensionName() -> String? {
         var file: String = ""
         if var idx = self.lastIndex(of: "/") {

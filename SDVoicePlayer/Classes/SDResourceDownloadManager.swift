@@ -32,14 +32,13 @@ class SDResourceDownloadManager: NSObject, URLSessionDownloadDelegate {
     
     public func download(resourceURL: String,
                          progress: ((_ resourceURL: String, _ progress: Float) -> Void)? = nil,
-                         convert: ((_ resourceURL: String, _ filePath: String) -> String?)? = nil,
                          completion: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)?) {
         if resourceURL.isEmpty {
             completion?(resourceURL, nil, NSError.getPlayerErrorWithCode(code: .invalidURL))
             return
         }
         if let op = getDownloadOperation(with: resourceURL) {
-            op.addHandler(progress: progress, convert: convert, completion: completion)
+            op.addHandler(progress: progress, completion: completion)
         } else {
             let op = SDResourceDownloadOperation.init(resourceURL: resourceURL, progress: progress, completion: completion, session: session)
             op.completionBlock = { [weak self] in

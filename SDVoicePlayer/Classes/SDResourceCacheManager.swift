@@ -17,36 +17,65 @@ public class SDResourceCacheManager: NSObject {
         
         ioQueue.setAsSpecific()
         
-        let folderPath = SDVoiceUtils.getResourceCacheDirectory()
+        let folderPath = SDVoiceUtils.getResourceHomeDirectory()
         if !FileManager.default.fileExists(atPath: folderPath) {
             try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: folderPath), withIntermediateDirectories: true)
+            
+            let cachedPath = SDVoiceUtils.getResourceCachedDirectory()
+            try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: cachedPath), withIntermediateDirectories: true)
+            
+            let downloadedPath = SDVoiceUtils.getResourceDownloadedDirectory()
+            try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: cachedPath), withIntermediateDirectories: true)
         }
     }
     
     // MARK: Cache
-    @objc public func isResourceCached(url: String) -> Bool {
-        let filePath = SDVoiceUtils.mappedResourceFilePath(url: url)
+    public func isResourceCached(url: String, transformerKey: String? = nil) -> Bool {
+        let filePath = SDVoiceUtils.mappedResourceCachedFilePath(url: url)
         return ioQueue.syncSafe({ FileManager.default.fileExists(atPath: filePath) })
     }
     
-    @objc public func getCachedResourceFilePath(for url: String) -> String? {
+    public func getCachedResourceFilePath(for url: String, transformerKey: String? = nil) -> String? {
         var filePath: String? = nil
-        if isResourceCached(url: url) {
-            filePath = SDVoiceUtils.mappedResourceFilePath(url: url)
+        if isResourceCached(url: url, transformerKey: transformerKey) {
+            filePath = SDVoiceUtils.mappedResourceCachedFilePath(url: url, appendKey: transformerKey)
         }
         return filePath
     }
     
-    @objc public func getCachedResourceFilePath(for url: String, completion: ((String?) -> Void)?) {
+    public func getCachedResourceFilePath(for url: String, transformerKey: String? = nil, completion: ((String?) -> Void)?) {
         ioQueue.async {
-            let filePath = self.getCachedResourceFilePath(for: url)
-            completion?(filePath)
+            let filePath = self.getCachedResourceFilePath(for: url, transformerKey: transformerKey)
+            DispatchQueue.main.async {
+                completion?(filePath)
+            }
         }
     }
     
-    @objc public func clearAllCache() {
+    public func storeCache(resourceURL: String, transformerKey: String? = nil, srcPath: String, completion: ((_ destPath: String?, _ error: Error?) -> Void)?) {
+        storeCache(srcPath: srcPath, destPath: SDVoiceUtils.mappedResourceCachedFilePath(url: resourceURL, appendKey: transformerKey), completion: completion)
+    }
+    
+    public func storeCache(srcPath: String, destPath: String, completion: ((_ destPath: String?, _ error: Error?) -> Void)?) {
         ioQueue.async {
-            let folderPath = SDVoiceUtils.getResourceCacheDirectory()
+            let srcLoc = URL.init(fileURLWithPath: srcPath)
+            let destLoc = URL.init(fileURLWithPath: destPath)
+            do {
+                try FileManager.default.moveItem(at: srcLoc, to: destLoc)
+                DispatchQueue.main.async {
+                    completion?(destPath, nil)
+                }
+            } catch let error { 
+                DispatchQueue.main.async {
+                    completion?(nil, error)
+                }
+            }
+        }
+    }
+    
+    public func clearAllCache() {
+        ioQueue.async {
+            let folderPath = SDVoiceUtils.getResourceCachedDirectory()
             do {
                 // 获取文件夹中的所有内容
                 let filePaths = try FileManager.default.contentsOfDirectory(atPath: folderPath)

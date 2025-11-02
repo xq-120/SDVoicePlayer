@@ -88,7 +88,7 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
                 cell.voiceView.startVoiceAnimate()
             }
             
-            SDVoicePlayer.shared.play(voice: model.voiceURL, downloadProgress: nil, voiceConvertHandler: nil) { [weak self] voiceURL, currentTime, duration in
+            SDVoicePlayer.shared.play(voiceURL: model.voiceURL, downloadProgress: nil) { [weak self] voiceURL, currentTime, duration in
                 guard let self = self else {
                     return
                 }
@@ -142,7 +142,7 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
                 cell.voiceView.startVoiceAnimate()
             }
             
-            SDVoicePlayer.shared.play(voice: model.voiceURL, downloadProgress: nil, voiceConvertHandler: nil) { [weak self] voiceURL, currentTime, duration in
+            SDVoicePlayer.shared.play(voiceURL: model.voiceURL, downloadProgress: nil) { [weak self] voiceURL, currentTime, duration in
                 guard let self = self else {
                     return
                 }
@@ -185,7 +185,10 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
             }
             let playTimeChangedBlk = getPlayTimeChangedBlock(cell: cell, model:model, indexPath: indexPath)
             let PlayCompletionBlk = getPlayCompletionBlock(cell: cell, model:model, indexPath: indexPath)
-            SDVoicePlayer.shared.play(voice: model.voiceURL, downloadProgress: nil, voiceConvertHandler: nil, playTimeChanged: playTimeChangedBlk, playCompletion: PlayCompletionBlk)
+            SDVoicePlayer.shared.play(voiceURL: model.voiceURL,
+                                      downloadProgress: nil,
+                                      playTimeChanged: playTimeChangedBlk,
+                                      playCompletion: PlayCompletionBlk)
         }
     }
     

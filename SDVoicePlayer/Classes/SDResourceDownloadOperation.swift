@@ -11,12 +11,6 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     
     var resourceURL: String
     
-    var progressBlk: ((_ resourceURL: String, _ progress: Float) -> Void)?
-    
-    var convertBlk: ((_ resourceURL: String, _ filePath: String) -> String?)?
-    
-    var completionBlk: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)?
-    
     private weak var session: URLSession?
     
     internal var downloadTask: URLSessionDownloadTask?
@@ -53,21 +47,18 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     
     init(resourceURL: String,
          progress: ((_ resourceURL: String, _ progress: Float) -> Void)? = nil,
-         convert: ((_ resourceURL: String, _ filePath: String) -> String?)? = nil,
          completion: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)? = nil,
          session: URLSession? = nil) {
         self.resourceURL = resourceURL
         self.session = session
         super.init()
-        self.addHandler(progress: progress, convert: convert, completion: completion)
+        self.addHandler(progress: progress, completion: completion)
     }
     
     func addHandler(progress: ((_ resourceURL: String, _ progress: Float) -> Void)? = nil,
-                    convert: ((_ resourceURL: String, _ filePath: String) -> String?)? = nil,
                     completion: ((_ resourceURL: String, _ filePath: String?, _ error: Error?) -> Void)? = nil) {
         let token = SDResourceDownloadOperationToken.init()
         token.progressBlock = progress
-        token.convertBlock = convert
         token.completedBlock = completion
         lock.withLock {
             callbackTokens.append(token)
@@ -89,7 +80,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
                 } else {
                     error = NSError.getPlayerErrorWithCode(code: .unknown)
                 }
-                completionBlk?(resourceURL, nil, error)
+                callCompletion(url: resourceURL, destLoc: nil, error: error)
                 return
             }
             
@@ -106,7 +97,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
             if isCancelled || isFinished {
                 return
             }
-            super.cancel() //super.cancel() 是线程安全，随便在哪个线程调用都行。自己扩展的逻辑要保证线程安全。
+            super.cancel()
             
             downloadTask?.cancel()
             downloadTask = nil
@@ -115,7 +106,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
             if !isFinished { isFinished = true }
             
             //通知外部已经取消。
-            completionBlk?(resourceURL, nil, NSError.getPlayerErrorWithCode(code: .downloadCancelled))
+            callCompletion(url: resourceURL, destLoc: nil, error: NSError.getPlayerErrorWithCode(code: .downloadCancelled))
             
             reset()
         }
@@ -130,9 +121,26 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     func reset() {
         lock.withLock {
             downloadTask = nil
-            progressBlk = nil
-            convertBlk = nil
-            completionBlk = nil
+            callbackTokens.removeAll()
+        }
+    }
+    
+    // MARK: CallBack
+    func callProgress(url: String, progress: Float) {
+        lock.lock()
+        var tokens = callbackTokens
+        lock.unlock()
+        for token in tokens {
+            token.progressBlock?(url, progress)
+        }
+    }
+    
+    func callCompletion(url: String, destLoc: String?, error: Error?) {
+        lock.lock()
+        var tokens = callbackTokens
+        lock.unlock()
+        for token in tokens {
+            token.completedBlock?(url, destLoc, error)
         }
     }
     
@@ -140,33 +148,31 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if isFinished {return}
         
-        let completionBlk = completionBlk
         let resourceURL = resourceURL
         if error != nil {
-            DispatchQueue.main.async {
-                completionBlk?(resourceURL, nil, NSError.getPlayerErrorWithCode(code: .downloadFailed))
-            }
+            callCompletion(url: resourceURL, destLoc: nil, error: NSError.getPlayerErrorWithCode(code: .downloadFailed))
             done()
         } else {
-            let destLoc: String = SDVoiceUtils.mappedResourceFilePath(url: resourceURL)
-            if let convertBlk = convertBlk, let convertedPath = convertBlk(resourceURL, destLoc) {
-                //替换掉之前的缓存
-                try? FileManager.default.moveItem(atPath: convertedPath, toPath: destLoc)
-            }
-            DispatchQueue.main.async {
-                completionBlk?(resourceURL, destLoc, nil)
+            let destLoc: String = SDVoiceUtils.mappedResourceDownloadedFilePath(url: resourceURL)
+            if FileManager.default.fileExists(atPath: destLoc) {
+                callCompletion(url: resourceURL, destLoc: destLoc, error: nil)
+            } else {
+                callCompletion(url: resourceURL, destLoc: nil, error: NSError.getPlayerErrorWithCode(code: .downloadFailed))
             }
             done()
         }
     }
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        let destLoc = URL.init(fileURLWithPath: SDVoiceUtils.mappedResourceFilePath(url: resourceURL))
+        let destLoc = URL.init(fileURLWithPath: SDVoiceUtils.mappedResourceDownloadedFilePath(url: resourceURL))
         try? FileManager.default.moveItem(at: location, to: destLoc)
     }
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        guard totalBytesExpectedToWrite > 0 else {
+            return
+        }
         let progress = min(1, Float(totalBytesWritten) / Float(totalBytesExpectedToWrite))
-        self.progressBlk?(resourceURL, progress)
+        callProgress(url: resourceURL, progress: progress)
     }
 }
