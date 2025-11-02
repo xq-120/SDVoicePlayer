@@ -17,16 +17,11 @@ public class SDResourceCacheManager: NSObject {
         
         ioQueue.setAsSpecific()
         
-        let folderPath = SDVoiceUtils.getResourceHomeDirectory()
-        if !FileManager.default.fileExists(atPath: folderPath) {
-            try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: folderPath), withIntermediateDirectories: true)
-            
-            let cachedPath = SDVoiceUtils.getResourceCachedDirectory()
-            try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: cachedPath), withIntermediateDirectories: true)
-            
-            let downloadedPath = SDVoiceUtils.getResourceDownloadedDirectory()
-            try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: cachedPath), withIntermediateDirectories: true)
-        }
+        let cachedPath = SDVoiceUtils.getResourceCachedDirectory()
+        try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: cachedPath), withIntermediateDirectories: true)
+        
+        let downloadedPath = SDVoiceUtils.getResourceDownloadedDirectory()
+        try? FileManager.default.createDirectory(at: URL.init(fileURLWithPath: downloadedPath), withIntermediateDirectories: true)
     }
     
     // MARK: Cache
@@ -65,7 +60,7 @@ public class SDResourceCacheManager: NSObject {
                 DispatchQueue.main.async {
                     completion?(destPath, nil)
                 }
-            } catch let error { 
+            } catch let error {
                 DispatchQueue.main.async {
                     completion?(nil, error)
                 }

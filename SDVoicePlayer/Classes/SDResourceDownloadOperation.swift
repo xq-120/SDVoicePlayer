@@ -128,7 +128,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     // MARK: CallBack
     func callProgress(url: String, progress: Float) {
         lock.lock()
-        var tokens = callbackTokens
+        let tokens = callbackTokens
         lock.unlock()
         for token in tokens {
             token.progressBlock?(url, progress)
@@ -137,7 +137,7 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     
     func callCompletion(url: String, destLoc: String?, error: Error?) {
         lock.lock()
-        var tokens = callbackTokens
+        let tokens = callbackTokens
         lock.unlock()
         for token in tokens {
             token.completedBlock?(url, destLoc, error)
@@ -165,7 +165,11 @@ class SDResourceDownloadOperation: Operation, URLSessionDownloadDelegate, @unche
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         let destLoc = URL.init(fileURLWithPath: SDVoiceUtils.mappedResourceDownloadedFilePath(url: resourceURL))
-        try? FileManager.default.moveItem(at: location, to: destLoc)
+        do {
+            try FileManager.default.moveItem(at: location, to: destLoc)
+        } catch let err {
+            print("下载完成，移到文件失败:\(err)")
+        }
     }
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
