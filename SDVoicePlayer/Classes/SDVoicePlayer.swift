@@ -20,11 +20,13 @@ import GCDWeakTimer
     case invalidURL
     case downloadFailed
     case downloadCancelled
+    case transformFailed
     case decodeFailed
 }
 
 private let kErrorDomain = "com.SDVoicePlayer.www"
 private let kPlayErrorDesc = "播放失败，请重试"
+private let kDefaultTransformerKey = "defaultTransformer"
 
 @objc public class SDVoicePlayer: NSObject, AVAudioPlayerDelegate {
     
@@ -88,12 +90,8 @@ private let kPlayErrorDesc = "播放失败，请重试"
         return playerQueue.syncSafe { self._isPlaying && url == self.currentURL }
     }
     
-    @objc public func isDownloading(url: String) -> Bool {
-        return playerQueue.syncSafe { url == self.currentURL }
-    }
-    
     @objc public func isVoiceCached(url: String) -> Bool {
-        return self.resourceManager.isResourceCached(url: url, transformerKey: self.defaultVoiceConvertBlock == nil ? nil : "defaultTransformer")
+        return self.resourceManager.isResourceCached(url: url, transformerKey: self.defaultVoiceConvertBlock == nil ? nil : kDefaultTransformerKey)
     }
     
     // 更新回调。
@@ -140,7 +138,7 @@ private let kPlayErrorDesc = "播放失败，请重试"
             if !voiceURL.lowercased().hasPrefix("http") { //播放本地文件
                 let playURL = URL.init(fileURLWithPath: voiceURL)
                 self.playVoice(fileURL: playURL)
-            } else if let cachedPath = self.resourceManager.getCachedVoice(for: voiceURL, transformerKey: self.defaultVoiceConvertBlock == nil ? nil : "defaultTransformer") { //播放缓存
+            } else if let cachedPath = self.resourceManager.getCachedVoice(for: voiceURL, transformerKey: self.defaultVoiceConvertBlock == nil ? nil : kDefaultTransformerKey) { //播放缓存
                 let playURL = URL.init(fileURLWithPath: cachedPath)
                 self.playVoice(fileURL: playURL)
             } else if let _ = URL.init(string: voiceURL) {
@@ -151,56 +149,44 @@ private let kPlayErrorDesc = "播放失败，请重试"
                 self.resourceManager.loadResource(resourceURL: voiceURL, progress: downloadProgress) { [weak self] resourceURL, filePath, error in
                     guard let self = self else { return }
                     
-                    if let fp = filePath {
-                        if let convertBlk = self.defaultVoiceConvertBlock {
-                            if let convertFilePath = convertBlk(resourceURL, fp) {
-                                self.resourceManager.storeCache(resourceURL: resourceURL, transformerKey: "defaultTransformer", srcPath: convertFilePath) { destPath, error in
-                                    if let destPath = destPath {
-                                        // 播放
-                                        self.playerQueue.async {
-                                            if !self._isPlaying || self.currentURL != resourceURL {
-                                                return
-                                            }
-                                            let fileURL = URL.init(fileURLWithPath: destPath)
-                                            self.playVoice(fileURL: fileURL)
-                                        }
-                                    } else {
-                                        //失败时直接stop并回调
-                                        self.internalStop()
-                                        DispatchQueue.main.async {
-                                            playCompletion?(self.currentURL, error)
-                                        }
-                                    }
-                                }
-                            } else {
-                                //失败时直接stop并回调
-                                self.internalStop()
-                                DispatchQueue.main.async {
-                                    playCompletion?(self.currentURL, error)
-                                }
+                    if let filePath = filePath, let convertBlk = self.defaultVoiceConvertBlock {
+                        if let convertFilePath = convertBlk(resourceURL, filePath) {
+                            self.resourceManager.storeCache(resourceURL: resourceURL,
+                                                            transformerKey: kDefaultTransformerKey,
+                                                            srcPath: convertFilePath) { destPath, error in
+                                self.handleLoadedBlock(voiceURL: resourceURL, filePath: destPath, error: error, playCompletion: playCompletion)
                             }
-                        } else {
-                            // 播放
-                            self.playerQueue.async {
-                                if !self._isPlaying || self.currentURL != resourceURL {
-                                    return
-                                }
-                                let fileURL = URL.init(fileURLWithPath: fp)
-                                self.playVoice(fileURL: fileURL)
-                            }
+                        } else { //转换失败
+                            self.handleLoadedBlock(voiceURL: resourceURL, filePath: nil, error: NSError.getPlayerErrorWithCode(code: .transformFailed), playCompletion: playCompletion)
                         }
                     } else {
-                        //失败时直接stop并回调
-                        self.internalStop()
-                        DispatchQueue.main.async {
-                            playCompletion?(self.currentURL, error)
-                        }
+                        self.handleLoadedBlock(voiceURL: resourceURL, filePath: filePath, error: error, playCompletion: playCompletion)
                     }
                 }
             } else {
                 self.internalStop()
                 DispatchQueue.main.async {
                     playCompletion?(voiceURL, NSError.getPlayerErrorWithCode(code: .invalidURL))
+                }
+            }
+        }
+    }
+    
+    private func handleLoadedBlock(voiceURL: String,
+                                   filePath: String?,
+                                   error: Error?,
+                                   playCompletion: ((_ voiceURL: String?, _ error: Error?) -> Void)?) {
+        self.playerQueue.async {
+            if !self._isPlaying || self.currentURL != voiceURL {
+                return
+            }
+            if let filePath = filePath {
+                let fileURL = URL.init(fileURLWithPath: filePath)
+                self.playVoice(fileURL: fileURL)
+            } else {
+                self.internalStop()
+                DispatchQueue.main.async {
+                    playCompletion?(voiceURL, error)
                 }
             }
         }

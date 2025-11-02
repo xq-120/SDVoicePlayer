@@ -66,14 +66,14 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
         }
         
         //方案2,3简便很多。
-        cell.playActionBlk = { [weak self] sender in
-            guard let self = self else {return}
-//            self.handlePlayVoiceV2(cell: sender, model: item, indexPath: indexPath)
-            self.handlePlayVoiceV3(cell: sender, model: item, indexPath: indexPath)
-        }
-        if SDVoicePlayer.shared.isPlaying(url: item.voiceURL) {
-            cell.voiceView.startVoiceAnimate() //细节一点，方案3虽然播放器回调里面会更新cell，但回调是有间隔的。这里可以马上更新。
-        }
+//        cell.playActionBlk = { [weak self] sender in
+//            guard let self = self else {return}
+////            self.handlePlayVoiceV2(cell: sender, model: item, indexPath: indexPath)
+//            self.handlePlayVoiceV3(cell: sender, model: item, indexPath: indexPath)
+//        }
+//        if SDVoicePlayer.shared.isPlaying(url: item.voiceURL) {
+//            cell.voiceView.startVoiceAnimate() //细节一点，方案3虽然播放器回调里面会更新cell，但回调是有间隔的。这里可以马上更新。
+//        }
         return cell
     }
     
@@ -205,6 +205,7 @@ class FDEVoiceListViewController: FDEBaseViewController, UITableViewDelegate, UI
             
             //a和b的效果是一致的。
             if curIndexPath != indexPath { //a.curIndexPath != indexPath,说明cell发生复用且cell已经不在原先的位置。此时不能更新。
+                NSLog("cell复用不能更新，cur:\(curIndexPath.row), indexPath:\(indexPath.row)")
                 return
             }
             
